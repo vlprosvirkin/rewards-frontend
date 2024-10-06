@@ -18,6 +18,7 @@ import { useSDK } from "@metamask/sdk-react";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import PulseLogoLoader from "@/components/PulseLogo";
 import axios from "axios";
+import { toast } from "react-toastify";
 const costs = [0, 100, 200, 400, 800, 1200, 2000, 3000, 4000, 8000];
 export const charactersData = [
   {
@@ -163,10 +164,14 @@ export default function Characters() {
       })
       .then((res) => {
         console.log(res.data);
+        toast.success("Character upgraded successfully!");
         setCharLvl(charLvl + 1);
       })
       .catch((err) => {
         console.log(err);
+        toast.error(
+          "Error upgrading character! " + (err?.response?.data?.message ?? err)
+        );
       });
   };
   console.log(

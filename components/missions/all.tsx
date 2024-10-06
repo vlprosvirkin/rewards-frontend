@@ -18,6 +18,7 @@ import { useWindowSize } from "@/hooks/useWindowSize";
 import { getCode } from "../InviteSection/getCode";
 import { Spinner } from "../MintSection/Loader";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 interface TaskItemProps {
   item: any;
@@ -210,6 +211,7 @@ export default function AllTasks({ category }: any) {
               // alert(err?.response?.data.errors[0]);
               setText(err?.response?.data.errors[0]);
               errText = err?.response?.data.errors[0];
+              toast.error(err?.response?.data.errors[0]);
             }
             return { data: undefined };
           });
@@ -218,6 +220,7 @@ export default function AllTasks({ category }: any) {
         if (data.hash) {
           setTaskStatus("Success!");
           setTimeout(onClose, 2000);
+          toast.success(`Minting successful! Transaction hash: ${data.txHash}`);
         } else {
           !errText && setIsError(true);
         }
@@ -228,7 +231,7 @@ export default function AllTasks({ category }: any) {
         setIsMinting(false);
       }
     } else {
-      alert("MetaMask is not installed");
+      toast.info("MetaMask is not installed");
     }
   };
 

@@ -10,29 +10,44 @@ import { useEffect, useState } from "react";
 import { config } from "@/config";
 import { useSession } from "next-auth/react";
 import { useSDK } from "@metamask/sdk-react";
-import { linkTgAccount } from "@/app/profile/link";
+// import { linkTgAccount } from "@/app/profile/link";
 import { CoolButton } from "../CoolButton";
 import { signInWithTwitter } from "../SignInTwitter/sign-in";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import XLogo from "@/public/images/X_logo.png";
 import TelegramLogo from "@/public/images/telegram-logo.png";
 import Image from "next/image";
+import { getCode } from "../InviteSection/getCode";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export function LinkedAccounts({ setActiveTab }: any) {
   const [tgAccount, setTgAccount] = useState<boolean>(false);
   const [email, setEmail] = useState("");
   const session = useSession();
-  const sdk = useSDK();
+  const { account } = useSDK();
+  const [user, setUser] = useState<any>();
+
+  useEffect(() => {
+    const doAsync = async () => {
+      if (account) {
+        const data = await getCode(account);
+        setTgAccount(Boolean(data?.telegramId));
+      }
+    };
+
+    doAsync();
+  }, [account]);
 
   useEffect(() => {
     tgAccount ? console.log(tgAccount) : null;
   }, [tgAccount]);
 
-  const test = async (id: number) => {
-    console.log("Linking this tg account: ", id);
+  // const test = async (id: number) => {
+  //   console.log("Linking this tg account: ", id);
 
-    linkTgAccount({ address: sdk?.account, tgId: id });
-  };
+  //   linkTgAccount({ address: account, tgId: id });
+  // };
   // 6819890766
   const connectTgAccount = () => {
     // window.Telegram.Login.auth({ bot_id: bot_id }, (data: any) => {
@@ -41,9 +56,35 @@ export function LinkedAccounts({ setActiveTab }: any) {
     //   }
     // });
     window.Telegram.Login.auth({ bot_id: 6819890766 }, (data: any) => {
-      if (data) {
+      if (data?.user?.id) {
         console.log(data);
-        // do whatever you want with login data
+        data.user && setTgAccount(true);
+        toast.loading("Linking telegram account...");
+        axios
+          .post("", {
+            twitterId: null,
+            telegramId: data?.user?.id,
+          })
+          .then((res) => {
+            console.log(res);
+            toast.success("Telegram account linked successfully");
+          })
+          .catch((err) => {
+            toast.error("Error linking telegram account");
+          });
+        //   {
+        //     "user": {
+        //         "id": 33333333,
+        //         "first_name": "Ivan",
+        //         "last_name": "Ivanov",
+        //         "username": "Ivan_Ivanov",
+        //         "photo_url": "https:\/\/t.me\/i\/userpic\/320\/5unTUeP74dR77kq0CTHk_baZ7_SM_FN9rx1HxKFHiWk.jpg",
+        //         "auth_date": 1728211141,
+        //         "hash": "a41b769fe2b0fa65c3c43741e2546d3dda5553a98601d69bef71a24cab29af3b"
+        //     },
+        //     "html": "<button class=\"btn tgme_widget_login_button\" onclick=\"return TWidgetLogin.auth();\"><i class=\"tgme_widget_login_button_icon\"><\/i>Войти как <span dir=\"auto\">Yan<\/span><\/button><i class=\"tgme_widget_login_user_photo bgcolor5\" data-content=\"Y\" onclick=\"return TWidgetLogin.auth();\"><img src=\"https:\/\/cdn4.telesco.pe\/file\/QhCHe0lPnNzDB5KOHIqRPybvwakA4L7r8IXXeWWxZx2UDgHlRuLxivZk6xnX30Ov76vXGr8Qq0h3OST_7ulNhuCeBitCyDvWBsKuP6dGAJKy9MRKa6LNeIEA51GJUL6X9UWeLWudpwWFnUbFNspZOpvjSupZxjwImMNj9Lb9J8BehVSTIyTlIm4vV-k9o04wX-pmuPPkVfxyQFHRFaIMq2FgsD-d4OBIaSIqQf1aVzLN9mDz5fOT2HddEAX_w1LEaXXDqNo3sBHo4d5qgRHh7BAQWxtk-fw5KY5reSoj2W5jGbQ_Y3PIrkTb59sCW2nsyHomE6RX1RexqTODXz27uw.jpg\"><\/i>",
+        //     "origin": "https:\/\/rewards.aspis.finance"
+        // }
       }
     });
   };
@@ -110,9 +151,11 @@ export function LinkedAccounts({ setActiveTab }: any) {
 							Connect
 						</button>
 						*/}
-            <div className="ml-auto">
-              <CoolButton text="Connect" onClick={connectTgAccount} />
-            </div>
+            {!tgAccount && (
+              <div className="ml-auto">
+                <CoolButton text="Connect" onClick={connectTgAccount} />
+              </div>
+            )}
           </span>
         </div>
       </div>

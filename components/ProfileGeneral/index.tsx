@@ -14,7 +14,6 @@ import mstreak from "@/public/monthStreak.svg";
 import sphere from "@/public/scrollSphere.svg";
 import a from "@/public/characters/a.svg";
 
-import linked from "@/public/linked.png";
 import { getPos } from "@/app/missions/page";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import axios from "axios";

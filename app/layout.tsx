@@ -4,9 +4,9 @@ import { Anonymous_Pro } from "next/font/google";
 import localFont from "next/font/local";
 import Header from "@/components/header";
 import { Providers } from "@/app/providers";
-import Script from "next/script";
 import "./app.css";
-import PulseLogoLoader from "@/components/PulseLogo";
+import { ToastContainer, Flip } from "react-toastify"; // https://fkhadra.github.io/react-toastify/introduction
+import "react-toastify/dist/ReactToastify.css";
 
 const gotham = localFont({
   src: "../GothamPro.woff",
@@ -31,11 +31,29 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <ToastContainer
+        // hideProgressBar
+        progressClassName={"progress-bar"}
+        transition={Flip}
+        position="top-right"
+        limit={1}
+        progressStyle={{ background: "#cac4d0", height: "2px" }}
+        // bodyStyle={{
+        //   maxWidth: "400px",
+        //   borderRadius: "16px",
+        //   position: "fixed",
+        // }}
+        style={{ borderRadius: "16px" }}
+        theme="dark"
+
+        // bodyStyle={{ background: "#0D001E" }}
+      />
       <body
         className={`${gotham.className} ${anon.variable} flex flex-col min-h-screen w-screen`}
       >
         <Providers>
           <Header />
+
           <style>
             {`
 							body {

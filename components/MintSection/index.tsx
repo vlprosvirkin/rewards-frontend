@@ -13,6 +13,7 @@ import { useState } from "react";
 import { SuccessPopup } from "./SuccessPopup";
 import { useDisclosure } from "@chakra-ui/react";
 import { useWindowSize } from "@/hooks/useWindowSize";
+import { toast } from "react-toastify";
 
 // import dotenv from "dotenv";
 // dotenv.config();
@@ -47,17 +48,17 @@ export const MintSection: React.FC = () => {
         setIsMinting(false);
 
         if (res.ok) {
-          alert(`Minting successful! Transaction hash: ${data.txHash}`);
+          toast.success(`Minting successful! Transaction hash: ${data.txHash}`);
         } else {
-          alert("Error minting NFT. Please try again.");
+          toast.error("Error minting NFT. Please try again.");
         }
       } catch (error) {
         console.error("Error minting NFT:", error);
-        alert("Error minting NFT. Please try again.");
+        toast.error("Error minting NFT. " + error);
         setIsMinting(false);
       }
     } else {
-      alert("MetaMask is not installed");
+      toast.info("MetaMask is not installed");
     }
   };
 

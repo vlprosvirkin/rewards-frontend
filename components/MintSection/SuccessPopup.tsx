@@ -17,6 +17,7 @@ import kartinka2 from "@/public/modal/right.png";
 import axios from "axios";
 import { getCode } from "../InviteSection/getCode";
 import { useSDK } from "@metamask/sdk-react";
+import { toast } from "react-toastify";
 
 export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
   const [isMinting, setIsMinting] = useState(false);
@@ -81,6 +82,7 @@ export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
               // alert(err?.response?.data.errors[0]);
               setText(err?.response?.data.errors[0]);
               errText = err?.response?.data.errors[0];
+              toast.error(err?.response?.data.errors[0]);
             }
             return { data: undefined };
           });
@@ -89,16 +91,20 @@ export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
         if (data.hash) {
           setTxHash(data.txHash);
           setSuccess(true);
+          toast.success(`Minting successful! Transaction hash: ${data.txHash}`);
         } else {
           !errText && setIsError(true);
+          toast.error("Error minting NFT. Please try again.");
         }
       } catch (error) {
         console.error("Error minting NFT:", error);
         setIsError(true);
         setIsMinting(false);
+        toast.error("Error minting NFT. " + error);
       }
     } else {
       alert("MetaMask is not installed");
+      toast.info("MetaMask is not installed");
     }
   };
 
