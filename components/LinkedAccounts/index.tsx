@@ -56,14 +56,14 @@ export function LinkedAccounts({ setActiveTab }: any) {
     //   }
     // });
     window.Telegram.Login.auth({ bot_id: 6819890766 }, (data: any) => {
-      if (data?.user?.id) {
+      if (data?.user?.id || data?.id) {
         console.log(data);
-        data.user && setTgAccount(true);
+        (data.user || data.id) && setTgAccount(true);
         toast.loading("Linking telegram account...");
         axios
           .post("", {
             twitterId: null,
-            telegramId: data?.user?.id,
+            telegramId: data?.user?.id ?? data?.id,
           })
           .then((res) => {
             console.log(res);
