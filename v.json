@@ -1,0 +1,20 @@
+{
+    "id": 0,
+    "points": "1234",
+    "username": "asdf",
+    "canMint": true,
+    "referralCode": "AB-CD-EF-1234",
+    "referrals": 123,
+    "characterlvl": "0 | 1 | 2",
+    "character": "hippeis | hoplite | etc.",
+    "linkedAccounts": {
+        "twitter": "username",
+        "discord": "username",
+        "telegram": "username",
+        "email": "username"
+    },
+    "leaderBoardPlace": 1234,
+    "totalPoints": 1234,
+    "streak": "3-day | 7-day | 2-week | 1-month",
+    "completedQuests": []
+}

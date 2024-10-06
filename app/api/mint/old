@@ -1,0 +1,51 @@
+"use server";
+
+import { NextRequest } from "next/server";
+import { ethers } from "ethers";
+import { contractABI } from "./abi";
+
+export async function POST(req: NextRequest) {
+	try {
+		const { recipientAddress } = await req.json();
+
+		if (!recipientAddress) {
+			return Response.json(
+				{ message: "Recipient address is required" },
+				{ status: 400 }
+			);
+		}
+		const privateKey = process.env.PKEY as string;
+		const rpcUrl = process.env.RPC_URL as string;
+
+		if (!privateKey || !rpcUrl) {
+			return Response.json(
+				{ message: "Server configuration error" },
+				{ status: 500 }
+			);
+		}
+
+		const rpcProvider = new ethers.JsonRpcProvider(rpcUrl);
+		const adminWallet = new ethers.Wallet(privateKey, rpcProvider);
+
+		const deployedAddress = "0x2a3a92402cc0F74816129EAE2ea3b0F19c66A367";
+
+		const soulboundNFT = new ethers.Contract(
+			deployedAddress,
+			contractABI,
+			adminWallet
+		);
+
+		const tokenURI =
+			"https://aqua-magnificent-camel-41.mypinata.cloud/ipfs/QmWG8w763cix2CfwSP4nkEHJPgjYAhA4v6fUtvrKhxeBy9";
+
+		console.log("Minting NFT to:", recipientAddress);
+		const tx = await soulboundNFT.safeMint(recipientAddress, tokenURI);
+		const receipt = await tx.wait();
+
+		console.log("Transaction hash:", receipt.hash);
+		return Response.json({ txHash: receipt.hash }, { status: 200 });
+	} catch (error) {
+		console.error("Error minting NFT:", error);
+		return Response.json({ message: "Error minting NFT" }, { status: 500 });
+	}
+}

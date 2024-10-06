@@ -1,0 +1,107 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+button {
+  font-weight: 600;
+}
+
+.blur {
+  backdrop-filter: blur(4px);
+}
+
+button:hover {
+  opacity: 0.8;
+}
+button:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.mobile-nav-link {
+  transition: all 0.8s ease-in-out;
+}
+.mobile-nav-link:hover img {
+  border-radius: 10px;
+  border: 1px solid rgb(188 254 30);
+}
+
+.active img {
+  border-radius: 10px;
+  border: 1px solid rgb(188 254 30);
+}
+.chakra-modal__content {
+  backdrop-filter: blur(4px);
+  border: 1px solid;
+  max-width: 95%;
+  border-image-source: linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.09),
+      rgba(255, 255, 255, 0.09)
+    ),
+    radial-gradient(
+      195.56% 98.14% at 53.61% 98.14%,
+      rgba(255, 255, 255, 0) 87.47%,
+      rgba(255, 255, 255, 0.2) 100%
+    );
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #d64f02; /* Цвет фона спиннера */
+  border-top: 4px solid #3498db00; /* Цвет передней границы (создает эффект вращения) */
+  border-radius: 50%;
+  animation: spin 1s linear infinite; /* Анимация вращения */
+  margin: auto;
+}
+.pulse-logo-wraper {
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  margin: auto;
+  display: flex;
+  position: fixed;
+}
+.pulse-img {
+  animation: pulseLogo 800ms linear infinite;
+  width: 100px;
+  margin: auto;
+}
+.pulse-img img {
+  border-radius: 20px;
+}
+.shadow::after {
+  content: "";
+  position: fixed;
+  top: 100px;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  background: linear-gradient(180deg, rgba(4, 4, 4, 0.919) 40%, #00000000 100%);
+  z-index: -2;
+}
+@keyframes pulseLogo {
+  0% {
+    transform: scale(1);
+  }
+  60% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
