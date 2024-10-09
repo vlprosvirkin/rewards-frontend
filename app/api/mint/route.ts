@@ -5,7 +5,7 @@ export async function POST(req: Request) {
 		const { recipientAddress } = await req.json();
 
 		const res = await fetch(
-			`http://3.75.92.239:5000/v1/users/mint/${recipientAddress}`
+			`http://52.58.234.224:5000/v1/users/mint/${recipientAddress}`
 		);
 
 		if (!res.ok) {
