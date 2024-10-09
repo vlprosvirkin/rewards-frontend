@@ -6,7 +6,7 @@ export const checkTask = async (
   code: string | undefined
 ) => {
   const req = await fetch(
-    `http://3.75.92.239:5000/v1/quests/complete/${code}`,
+    `http://52.58.234.224:5000/v1/quests/complete/${code}`,
     {
       method: "POST",
       headers: {

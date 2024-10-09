@@ -36,7 +36,8 @@ export default function RootLayout({
         progressClassName={"progress-bar"}
         transition={Flip}
         position="top-right"
-        limit={1}
+        autoClose={3000}
+        limit={2}
         progressStyle={{ background: "#cac4d0", height: "2px" }}
         // bodyStyle={{
         //   maxWidth: "400px",

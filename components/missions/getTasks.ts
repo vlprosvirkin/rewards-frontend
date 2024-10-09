@@ -1,8 +1,8 @@
 "use server";
 
 export const getTasks = async () => {
-	const req = await fetch("http://3.75.92.239:5000/v1/quests");
-	const data = req.json();
+  const req = await fetch("http://52.58.234.224:5000/v1/quests");
+  const data = req.json();
 
-	return data;
+  return data;
 };

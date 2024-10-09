@@ -74,8 +74,9 @@ export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
         // 	body: JSON.stringify({ recipientAddress }),
         // });
         let errText = "";
+        toast.loading("Minting NFT...");
         const { data } = await axios
-          .get(`http://3.75.92.239:5000/v1/users/mint/${recipientAddress}`)
+          .get(`http://52.58.234.224:5000/v1/users/mint/${recipientAddress}`)
           .catch((err) => {
             console.log(err);
             if (err?.response?.data.errors) {
@@ -86,6 +87,7 @@ export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
             }
             return { data: undefined };
           });
+        toast.dismiss();
         setIsMinting(false);
 
         if (data.hash) {

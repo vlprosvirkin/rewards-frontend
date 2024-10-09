@@ -67,9 +67,11 @@ export function LinkedAccounts({ setActiveTab }: any) {
           })
           .then((res) => {
             console.log(res);
+            toast.dismiss();
             toast.success("Telegram account linked successfully");
           })
           .catch((err) => {
+            toast.dismiss();
             toast.error("Error linking telegram account");
           });
         //   {

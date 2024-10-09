@@ -7,25 +7,27 @@ import hand from "@/public/hand.png";
 import { useSDK } from "@metamask/sdk-react";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import axios from "axios";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 export const InviteSection: React.FC = () => {
   const { account } = useSDK();
   const { isMobile } = useWindowSize();
-
+  const router = useRouter();
   const showCode = async () => {
     !account && toast.info("You must connect your wallet first");
     toast.loading("Fetching referral code...");
     await axios
-      .get(`http://3.75.92.239:5000/v1/users/${account}`)
+      .get(`http://52.58.234.224:5000/v1/users/${account}`)
       .then((res) => {
         console.log(res.data);
+        toast.dismiss();
         toast.success(`Your referral code is: ${res.data.referral}`);
         router.replace("/profile");
       })
       .catch((err) => {
         console.log(err);
+        toast.dismiss();
         toast.error("Error fetching referral code");
       });
   };

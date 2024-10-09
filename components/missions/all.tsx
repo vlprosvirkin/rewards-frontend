@@ -203,8 +203,9 @@ export default function AllTasks({ category }: any) {
         // 	body: JSON.stringify({ recipientAddress }),
         // });
         let errText = "";
+        toast.loading("Minting NFT...");
         const { data } = await axios
-          .get(`http://3.75.92.239:5000/v1/users/mint/${recipientAddress}`)
+          .get(`http://52.58.234.224:5000/v1/users/mint/${recipientAddress}`)
           .catch((err) => {
             console.log(err);
             if (err?.response?.data.errors) {
@@ -216,6 +217,7 @@ export default function AllTasks({ category }: any) {
             return { data: undefined };
           });
         setIsMinting(false);
+        toast.dismiss();
 
         if (data.hash) {
           setTaskStatus("Success!");

@@ -26,6 +26,7 @@ import {
 } from "@chakra-ui/react";
 import { shortenAddress } from "@/utils/shortenAddress";
 import { charactersData } from "@/app/characters/page";
+import { toast } from "react-toastify";
 
 const formatCode = (input: string): string => {
   const upperCased = input.toUpperCase();
@@ -58,18 +59,27 @@ export function ProfileGeneral({ setActiveTab }: any) {
   const onClose = () => setIsOpen(false);
 
   const setRefferal = async () => {
-    const { data } = await axios.post(
-      "http://3.75.92.239:5000/v1/users/referral",
-      {
+    toast.loading("Applying referral link...");
+    const { data } = await axios
+      .post("http://52.58.234.224:5000/v1/users/referral", {
         referralAddress: account,
         refCode: referralLink,
-      }
-    );
-    data.message && alert(data.message);
+      })
+      .catch((e) => {
+        console.log(e);
+        toast.dismiss();
+        toast.error("Error applying referral link");
+        return { data: undefined };
+      });
+
+    if (data.message) {
+      toast.dismiss();
+      toast.success(data?.message);
+    }
   };
   const changeUsername = async () => {
     await axios
-      .post(`http://3.75.92.239:5000/v1/users/username/${account}`, {
+      .post(`http://52.58.234.224:5000/v1/users/username/${account}`, {
         username: newUserName,
       })
       .then(() => {
@@ -170,7 +180,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
 
   const setReferral = async () => {
     const { data } = await axios
-      .post(`http://3.75.92.239:5000/v1/users/referral/${account}`, {
+      .post(`http://52.58.234.224:5000/v1/users/referral/${account}`, {
         referral: referralLink,
         user: account,
       })
@@ -514,7 +524,10 @@ export function ProfileGeneral({ setActiveTab }: any) {
                   placeholder="friend-link"
                   onChange={(e) => setReferralLink(e.target.value)}
                 />
-                <button className="font-bold rounded-lg py-[14px] px-[42px] bg-white/[.05] ml-auto">
+                <button
+                  onClick={setRefferal}
+                  className="font-bold rounded-lg py-[14px] px-[42px] bg-white/[.05] ml-auto"
+                >
                   Apply
                 </button>
               </span>

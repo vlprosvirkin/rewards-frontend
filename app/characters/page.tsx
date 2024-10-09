@@ -158,17 +158,20 @@ export default function Characters() {
 
   if (!windowSize?.width) return <PulseLogoLoader />;
   const lvlUp = async () => {
+    toast.loading("Upgrading character...");
     await axios
-      .post("http://3.75.92.239:5000/v1/users/upgradeChar", {
+      .post("http://52.58.234.224:5000/v1/users/upgradeChar", {
         address: account,
       })
       .then((res) => {
         console.log(res.data);
+        toast.dismiss();
         toast.success("Character upgraded successfully!");
         setCharLvl(charLvl + 1);
       })
       .catch((err) => {
         console.log(err);
+        toast.dismiss();
         toast.error(
           "Error upgrading character! " + (err?.response?.data?.message ?? err)
         );

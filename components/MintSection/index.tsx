@@ -36,6 +36,7 @@ export const MintSection: React.FC = () => {
 
         // Отправляем запрос на сервер для выполнения минтинга
         setIsMinting(true);
+        toast.loading("Minting NFT...");
         const res = await fetch("/api/mint", {
           method: "POST",
           headers: {
@@ -46,7 +47,7 @@ export const MintSection: React.FC = () => {
 
         const data = await res.json();
         setIsMinting(false);
-
+        toast.dismiss();
         if (res.ok) {
           toast.success(`Minting successful! Transaction hash: ${data.txHash}`);
         } else {
