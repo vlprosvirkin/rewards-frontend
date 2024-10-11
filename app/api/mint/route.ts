@@ -5,7 +5,7 @@ export async function POST(req: Request) {
     const { recipientAddress } = await req.json();
 
     const res = await fetch(
-      `http://52.58.234.224:5000/v1/users/mint/${recipientAddress}`
+      `https://api-rewards.aspis.finance/v1/users/mint/${recipientAddress}`
     );
 
     if (!res.ok) {
