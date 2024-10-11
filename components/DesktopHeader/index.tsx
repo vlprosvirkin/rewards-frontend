@@ -7,17 +7,16 @@ import a from "@/public/characters/a.svg";
 import { useEffect, useState } from "react";
 import { useSDK } from "@metamask/sdk-react";
 import { getCode } from "../InviteSection/getCode";
-import { relative } from "path";
 
 export const DesktopHeader: React.FC = () => {
   const [points, setPoints] = useState<any>();
   const { account } = useSDK();
-  useEffect(() => {
-    const doAsync = async () => {
-      const data = await getCode(`${account}`);
-      setPoints(data?.totalPoints);
-    };
+  const doAsync = async () => {
+    const data = await getCode(`${account}`);
+    setPoints(data?.totalPoints);
+  };
 
+  useEffect(() => {
     doAsync();
   }, [account]);
 

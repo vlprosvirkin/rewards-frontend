@@ -14,6 +14,7 @@ import { SuccessPopup } from "./SuccessPopup";
 import { useDisclosure } from "@chakra-ui/react";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 // import dotenv from "dotenv";
 // dotenv.config();
@@ -37,19 +38,19 @@ export const MintSection: React.FC = () => {
         // Отправляем запрос на сервер для выполнения минтинга
         setIsMinting(true);
         toast.loading("Minting NFT...");
-        const res = await fetch("/api/mint", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ recipientAddress }),
-        });
+        const { data } = await axios.get(
+          "http://52.58.234.224:5000/v1/users/mint/" + recipientAddress,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-        const data = await res.json();
         setIsMinting(false);
         toast.dismiss();
-        if (res.ok) {
-          toast.success(`Minting successful! Transaction hash: ${data.txHash}`);
+        if (data?.hash) {
+          toast.success(`Minting successful! Transaction hash: ${data.hash}`);
         } else {
           toast.error("Error minting NFT. Please try again.");
         }

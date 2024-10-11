@@ -1,31 +1,24 @@
-"use server";
+import axios from "axios";
 
 export const checkTask = async (
   itemId: number | undefined,
   address: string | undefined,
   code: string | undefined
 ) => {
-  const req = await fetch(
+  const { data } = await axios.post(
     `http://52.58.234.224:5000/v1/quests/complete/${code}`,
     {
-      method: "POST",
       headers: {
         accept: "application/json",
         "Content-Type": "application/json",
       },
       // body: '{\n  "address": "0x02E06qef1123123azxcFasd0514211eCdd6D6f7A",\n  "props": {\n    "itemId": "1"\n  }\n}',
-      body: JSON.stringify({
-        address: address,
-        props: {
-          itemId,
-        },
-      }),
+      address: address,
+      props: {
+        itemId,
+      },
     }
   );
 
-  const res = await req.json();
-  console.log("Result of task completion:", res);
-  console.log("StatusCode:", req.status);
-
-  return res;
+  return data;
 };

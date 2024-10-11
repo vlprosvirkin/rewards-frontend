@@ -144,15 +144,19 @@ export default function AllTasks({ category }: any) {
     if (!account || !selectedTask) return alert("Please connect your wallet");
     try {
       setTaskStatus("Verifying...  ");
+      // toast.loading("Verifying task completion...");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       const res = await checkTask(
         selectedTask?.id,
         account,
         selectedTask?.code
       );
+      toast.dismiss();
       console.log("Task completion response:", res);
       if (res.message) {
         if (res.message === "Quest completed successfully") {
           setTaskStatus("Success!");
+          toast.success("Task completed successfully");
           const userData = user;
           userData.completedQuests.push(selectedTask);
           localStorage?.setItem("user", JSON.stringify(userData));
@@ -162,11 +166,13 @@ export default function AllTasks({ category }: any) {
         }
       } else if (res?.errors && res?.errors[0]) {
         setTaskStatus(res?.errors[0]);
+        toast.error(res?.errors[0]);
       } else {
         setTaskStatus("Conditions not met");
       }
     } catch (e) {
       console.log(e);
+      toast.error(String(e));
       setTaskStatus("Something went wrong.");
     }
   };
@@ -222,7 +228,7 @@ export default function AllTasks({ category }: any) {
         if (data.hash) {
           setTaskStatus("Success!");
           setTimeout(onClose, 2000);
-          toast.success(`Minting successful! Transaction hash: ${data.txHash}`);
+          toast.success(`Minting successful! Transaction hash: ${data.hash}`);
         } else {
           !errText && setIsError(true);
         }

@@ -1,4 +1,5 @@
-"use server";
+import axios from "axios";
+
 interface props {
   address: string;
 }
@@ -6,13 +7,14 @@ interface props {
 export const getCode = async (address: string) => {
   console.log("acc:", address);
   console.log("acc length:", address.length);
-  const req = await fetch(`http://52.58.234.224:5000/v1/users/${address}`, {
-    headers: {
-      accept: "application/json",
-    },
-  });
+  const { data } = await axios.get(
+    `http://52.58.234.224:5000/v1/users/${address}`,
+    {
+      headers: {
+        accept: "application/json",
+      },
+    }
+  );
 
-  const res = await req.json();
-
-  return res;
+  return data;
 };

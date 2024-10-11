@@ -90,10 +90,10 @@ export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
         toast.dismiss();
         setIsMinting(false);
 
-        if (data.hash) {
+        if (data?.hash) {
           setTxHash(data.txHash);
           setSuccess(true);
-          toast.success(`Minting successful! Transaction hash: ${data.txHash}`);
+          toast.success(`Minting successful! Transaction hash: ${data.hash}`);
         } else {
           !errText && setIsError(true);
           toast.error("Error minting NFT. Please try again.");

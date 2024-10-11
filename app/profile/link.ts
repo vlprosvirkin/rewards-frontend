@@ -1,4 +1,5 @@
-"use server";
+import axios from "axios";
+
 interface props {
   address?: string;
   tgId: number;
@@ -7,16 +8,10 @@ interface props {
 export const linkTgAccount = async ({ address, tgId }: props) => {
   console.log(`sending ${tgId} to ${address}`);
 
-  const req = await fetch(
+  const { data } = await axios.post(
     `http://52.58.234.224:5000/v1/users/add-ids/${address}`,
-    {
-      method: "POST",
-      body: JSON.stringify({ telegramId: tgId, twitterId: "123456789" }),
-    }
+    { telegramId: tgId, twitterId: "123456789" }
   );
 
-  const res = await req.json();
-
-  console.log("server response: ", res);
-  return res;
+  return data;
 };
