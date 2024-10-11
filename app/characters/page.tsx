@@ -160,7 +160,7 @@ export default function Characters() {
   const lvlUp = async () => {
     toast.loading("Upgrading character...");
     await axios
-      .post("http://52.58.234.224:5000/v1/users/upgradeChar", {
+      .post("https://api-rewards.aspis.finance/v1/users/upgradeChar", {
         address: account,
       })
       .then((res) => {

@@ -61,7 +61,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
   const setRefferal = async () => {
     toast.loading("Applying referral link...");
     const { data } = await axios
-      .post("http://52.58.234.224:5000/v1/users/referral", {
+      .post("https://api-rewards.aspis.finance/v1/users/referral", {
         referralAddress: account,
         refCode: referralLink,
       })
@@ -79,7 +79,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
   };
   const changeUsername = async () => {
     await axios
-      .post(`http://52.58.234.224:5000/v1/users/username/${account}`, {
+      .post(`https://api-rewards.aspis.finance/v1/users/username/${account}`, {
         username: newUserName,
       })
       .then(() => {
@@ -180,7 +180,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
 
   const setReferral = async () => {
     const { data } = await axios
-      .post(`http://52.58.234.224:5000/v1/users/referral/${account}`, {
+      .post(`https://api-rewards.aspis.finance/v1/users/referral/${account}`, {
         referral: referralLink,
         user: account,
       })

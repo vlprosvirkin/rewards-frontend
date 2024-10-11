@@ -18,7 +18,7 @@ export const InviteSection: React.FC = () => {
     !account && toast.info("You must connect your wallet first");
     toast.loading("Fetching referral code...");
     await axios
-      .get(`http://52.58.234.224:5000/v1/users/${account}`)
+      .get(`https://api-rewards.aspis.finance/v1/users/${account}`)
       .then((res) => {
         console.log(res.data);
         toast.dismiss();

@@ -39,7 +39,7 @@ export const MintSection: React.FC = () => {
         setIsMinting(true);
         toast.loading("Minting NFT...");
         const { data } = await axios.get(
-          "http://52.58.234.224:5000/v1/users/mint/" + recipientAddress,
+          "https://api-rewards.aspis.finance/v1/users/mint/" + recipientAddress,
           {
             headers: {
               "Content-Type": "application/json",

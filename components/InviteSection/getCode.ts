@@ -8,7 +8,7 @@ export const getCode = async (address: string) => {
   console.log("acc:", address);
   console.log("acc length:", address.length);
   const { data } = await axios.get(
-    `http://52.58.234.224:5000/v1/users/${address}`,
+    `https://api-rewards.aspis.finance/v1/users/${address}`,
     {
       headers: {
         accept: "application/json",

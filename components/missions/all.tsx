@@ -211,7 +211,7 @@ export default function AllTasks({ category }: any) {
         let errText = "";
         toast.loading("Minting NFT...");
         const { data } = await axios
-          .get(`http://52.58.234.224:5000/v1/users/mint/${recipientAddress}`)
+          .get(`https://api-rewards.aspis.finance/v1/users/mint/${recipientAddress}`)
           .catch((err) => {
             console.log(err);
             if (err?.response?.data.errors) {
