@@ -1,28 +1,25 @@
 "use server";
 
+import axios from "axios";
+
 interface props {
   address: string;
   referral: string;
 }
 
 export const registerUser = async ({ address, referral }: props) => {
-  const req = await fetch(
+  const res = await axios.post(
     "https://api-rewards.aspis.finance/v1/users/register",
     {
-      method: "POST",
+      withCredentials: true,
       headers: {
         accept: "application/json",
         "Content-Type": "application/json",
       },
-
-      body: JSON.stringify({
-        address: `${address}`,
-        referral: `${referral}`,
-      }),
+      address: address,
+      referral: referral,
     }
   );
 
-  const res = await req.json();
-
-  return res;
+  return res?.data;
 };

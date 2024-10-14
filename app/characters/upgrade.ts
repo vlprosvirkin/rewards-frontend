@@ -1,14 +1,17 @@
+import axios from "axios";
+
 export const lvlUp = async (address: any) => {
   console.log("address", address);
-  const req = await fetch(
+  const { data } = await axios.post(
     "https://api-rewards.aspis.finance/v1/users/upgradeChar",
     {
-      method: "POST",
-      body: JSON.stringify({ address: address }),
+      address: address,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
     }
   );
 
-  const res = await req.json();
-
-  return res;
+  return data;
 };
