@@ -76,7 +76,6 @@ export function ProfileGeneral({ setActiveTab }: any) {
   const changeUsername = async () => {
     await axios
       .post(`https://api-rewards.aspis.finance/v1/users/username/${account}`, {
-      .post(`https://api-rewards.aspis.finance/v1/users/username/${account}`, {
         username: newUserName,
       })
       .then(() => {
@@ -563,7 +562,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
           </div>
         </div>
       )}
-      <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent
           style={{

@@ -149,7 +149,7 @@ export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered size="xl">
+    <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent>
         <ModalBody className="text-center backdrop-blur-md rounded-[18px] border border-white/[.09]">
@@ -216,7 +216,7 @@ const Congratulations: React.FC<GratzProps> = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={closeModal} isCentered size="xl">
+    <Modal isOpen={isOpen} onClose={closeModal} isCentered>
       <ModalOverlay />
       <ModalContent>
         <ModalBody className="text-center backdrop-blur-md rounded-[18px] border border-white/[.09] overflow-hidden min-h-1/3">

@@ -249,7 +249,6 @@ export default function AllTasks({ category }: any) {
         isOpen={isOpen}
         onClose={onClose}
         key={`taskModal_${selectedTask?.id}`}
-        size="2xl"
         isCentered
       >
         <ModalContent
