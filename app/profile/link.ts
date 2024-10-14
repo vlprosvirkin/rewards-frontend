@@ -1,3 +1,5 @@
+"use server";
+
 import axios from "axios";
 
 interface props {
@@ -9,8 +11,16 @@ export const linkTgAccount = async ({ address, tgId }: props) => {
   console.log(`sending ${tgId} to ${address}`);
 
   const { data } = await axios.post(
-    `http://52.58.234.224:5000/v1/users/add-ids/${address}`,
-    { telegramId: tgId, twitterId: "123456789" }
+    `https://api-rewards.aspis.finance/v1/users/add-ids/${address}`,
+    {
+      telegramId: tgId,
+      twitterId: "123456789",
+      withCredentials: true,
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    }
   );
 
   return data;

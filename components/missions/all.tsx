@@ -15,9 +15,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import { getCode } from "../InviteSection/getCode";
+import { getCode, mint } from "../InviteSection/getCode";
 import { Spinner } from "../MintSection/Loader";
-import axios from "axios";
 import { toast } from "react-toastify";
 
 interface TaskItemProps {
@@ -146,6 +145,7 @@ export default function AllTasks({ category }: any) {
       setTaskStatus("Verifying...  ");
       // toast.loading("Verifying task completion...");
       await new Promise((resolve) => setTimeout(resolve, 1000));
+
       const res = await checkTask(
         selectedTask?.id,
         account,
@@ -210,18 +210,16 @@ export default function AllTasks({ category }: any) {
         // });
         let errText = "";
         toast.loading("Minting NFT...");
-        const { data } = await axios
-          .get(`http://52.58.234.224:5000/v1/users/mint/${recipientAddress}`)
-          .catch((err) => {
-            console.log(err);
-            if (err?.response?.data.errors) {
-              // alert(err?.response?.data.errors[0]);
-              setText(err?.response?.data.errors[0]);
-              errText = err?.response?.data.errors[0];
-              toast.error(err?.response?.data.errors[0]);
-            }
-            return { data: undefined };
-          });
+        const data = await mint(recipientAddress).catch((err) => {
+          console.log(err);
+          if (err?.response?.data.errors) {
+            // alert(err?.response?.data.errors[0]);
+            setText(err?.response?.data.errors[0]);
+            errText = err?.response?.data.errors[0];
+            toast.error(err?.response?.data.errors[0]);
+          }
+          return { data: undefined };
+        });
         setIsMinting(false);
         toast.dismiss();
 

@@ -15,6 +15,7 @@ import { useDisclosure } from "@chakra-ui/react";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { mint } from "../InviteSection/getCode";
 
 // import dotenv from "dotenv";
 // dotenv.config();
@@ -38,19 +39,12 @@ export const MintSection: React.FC = () => {
         // Отправляем запрос на сервер для выполнения минтинга
         setIsMinting(true);
         toast.loading("Minting NFT...");
-        const { data } = await axios.get(
-          "http://52.58.234.224:5000/v1/users/mint/" + recipientAddress,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
+        const data = await mint(recipientAddress);
         setIsMinting(false);
         toast.dismiss();
         if (data?.hash) {
           toast.success(`Minting successful! Transaction hash: ${data.hash}`);
+          toast.dismiss();
         } else {
           toast.error("Error minting NFT. Please try again.");
         }

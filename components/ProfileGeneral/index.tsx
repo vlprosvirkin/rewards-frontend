@@ -3,7 +3,7 @@
 import Image from "next/image";
 import pfp from "@/public/hoplite-lvl3.png";
 import { useEffect, useState } from "react";
-import { getCode } from "../InviteSection/getCode";
+import { getCode, setRef } from "../InviteSection/getCode";
 import { useSDK } from "@metamask/sdk-react";
 import { CoolButton } from "../CoolButton";
 
@@ -60,17 +60,13 @@ export function ProfileGeneral({ setActiveTab }: any) {
 
   const setRefferal = async () => {
     toast.loading("Applying referral link...");
-    const { data } = await axios
-      .post("http://52.58.234.224:5000/v1/users/referral", {
-        referralAddress: account,
-        refCode: referralLink,
-      })
-      .catch((e) => {
-        console.log(e);
-        toast.dismiss();
-        toast.error("Error applying referral link");
-        return { data: undefined };
-      });
+    if (!account) return toast.error("Please connect your wallet first");
+    const data = await setRef(referralLink, account).catch((e) => {
+      console.log(e);
+      toast.dismiss();
+      toast.error("Error applying referral link");
+      return { data: undefined };
+    });
 
     if (data.message) {
       toast.dismiss();
@@ -79,7 +75,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
   };
   const changeUsername = async () => {
     await axios
-      .post(`http://52.58.234.224:5000/v1/users/username/${account}`, {
+      .post(`https://api-rewards.aspis.finance/v1/users/username/${account}`, {
         username: newUserName,
       })
       .then(() => {
@@ -177,19 +173,6 @@ export function ProfileGeneral({ setActiveTab }: any) {
   useEffect(() => {}, [user]);
 
   const { isMobile } = useWindowSize();
-
-  const setReferral = async () => {
-    const { data } = await axios
-      .post(`http://52.58.234.224:5000/v1/users/referral/${account}`, {
-        referral: referralLink,
-        user: account,
-      })
-      .then((res) => {
-        console.log(res.data);
-        return res.data;
-      });
-    console.log(data);
-  };
 
   return (
     <div className={`flex flex-col max-w-full h-full`}>

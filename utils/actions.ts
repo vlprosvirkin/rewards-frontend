@@ -6,18 +6,21 @@ interface props {
 }
 
 export const registerUser = async ({ address, referral }: props) => {
-  const req = await fetch("http://52.58.234.224:5000/v1/users/register", {
-    method: "POST",
-    headers: {
-      accept: "application/json",
-      "Content-Type": "application/json",
-    },
+  const req = await fetch(
+    "https://api-rewards.aspis.finance/v1/users/register",
+    {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+      },
 
-    body: JSON.stringify({
-      address: `${address}`,
-      referral: `${referral}`,
-    }),
-  });
+      body: JSON.stringify({
+        address: `${address}`,
+        referral: `${referral}`,
+      }),
+    }
+  );
 
   const res = await req.json();
 

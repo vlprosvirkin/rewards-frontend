@@ -1,3 +1,4 @@
+"use server";
 import axios from "axios";
 
 export const checkTask = async (
@@ -6,7 +7,7 @@ export const checkTask = async (
   code: string | undefined
 ) => {
   const { data } = await axios.post(
-    `http://52.58.234.224:5000/v1/quests/complete/${code}`,
+    `https://api-rewards.aspis.finance/v1/quests/complete/${code}`,
     {
       headers: {
         accept: "application/json",

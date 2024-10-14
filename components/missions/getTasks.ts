@@ -1,7 +1,7 @@
 "use server";
 
 export const getTasks = async () => {
-  const req = await fetch("http://52.58.234.224:5000/v1/quests");
+  const req = await fetch("https://api-rewards.aspis.finance/v1/quests");
   const data = req.json();
 
   return data;

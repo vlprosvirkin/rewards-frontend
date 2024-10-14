@@ -94,7 +94,8 @@ export default function Characters() {
 
   useEffect(() => {
     const doAsync = async () => {
-      const data = await getCode(`${account}`);
+      if (!account) return;
+      const data = await getCode(account);
       setCharLvl(data.charLvl);
       setSelectedCharLvl(data.charLvl);
       setTotalPoints(data.totalPoints);

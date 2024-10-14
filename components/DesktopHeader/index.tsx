@@ -12,8 +12,10 @@ export const DesktopHeader: React.FC = () => {
   const [points, setPoints] = useState<any>();
   const { account } = useSDK();
   const doAsync = async () => {
-    const data = await getCode(`${account}`);
-    setPoints(data?.totalPoints);
+    if (!account) return;
+    const data = await getCode(account);
+    console.log(data);
+    setPoints(Number(data?.totalPoints));
   };
 
   useEffect(() => {

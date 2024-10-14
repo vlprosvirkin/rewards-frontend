@@ -5,7 +5,7 @@ export async function POST(req: Request) {
     const { recipientAddress } = await req.json();
 
     const res = await fetch(
-      `https://api-rewards.aspis.finance/v1/users/mint/${recipientAddress}`
+      `http://api-rewards.aspis.finance/v1/users/mint/${recipientAddress}`
     );
 
     if (!res.ok) {

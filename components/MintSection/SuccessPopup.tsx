@@ -14,8 +14,7 @@ import { useEffect, useState } from "react";
 import { Spinner } from "./Loader";
 import kartinka from "@/public/modal/left.png";
 import kartinka2 from "@/public/modal/right.png";
-import axios from "axios";
-import { getCode } from "../InviteSection/getCode";
+import { getCode, mint } from "../InviteSection/getCode";
 import { useSDK } from "@metamask/sdk-react";
 import { toast } from "react-toastify";
 
@@ -75,18 +74,18 @@ export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
         // });
         let errText = "";
         toast.loading("Minting NFT...");
-        const { data } = await axios
-          .get(`http://52.58.234.224:5000/v1/users/mint/${recipientAddress}`)
-          .catch((err) => {
-            console.log(err);
-            if (err?.response?.data.errors) {
-              // alert(err?.response?.data.errors[0]);
-              setText(err?.response?.data.errors[0]);
-              errText = err?.response?.data.errors[0];
-              toast.error(err?.response?.data.errors[0]);
-            }
-            return { data: undefined };
-          });
+        const data = await mint(recipientAddress).catch((err) => {
+          console.log(err);
+          if (err?.response?.data.errors) {
+            // alert(err?.response?.data.errors[0]);
+            setText(err?.response?.data.errors[0]);
+            errText = err?.response?.data.errors[0];
+            toast.error(err?.response?.data.errors[0]);
+            toast.error(err?.response?.data.errors[0]);
+          }
+          return { data: undefined };
+        });
+        toast.dismiss();
         toast.dismiss();
         setIsMinting(false);
 
