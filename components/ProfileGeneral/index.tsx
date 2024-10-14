@@ -76,6 +76,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
   const changeUsername = async () => {
     await axios
       .post(`https://api-rewards.aspis.finance/v1/users/username/${account}`, {
+      .post(`https://api-rewards.aspis.finance/v1/users/username/${account}`, {
         username: newUserName,
       })
       .then(() => {
