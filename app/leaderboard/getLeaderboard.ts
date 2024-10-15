@@ -4,7 +4,7 @@ import axios from "axios";
 
 export const getLeaderboard = async () => {
   const res = await axios.get(
-    "https://api-rewards.aspis.finance/v1/users/top?type=month",
+    "https://api-rewards.aspis.finance/v1/users/top",
     {
       withCredentials: true,
 
