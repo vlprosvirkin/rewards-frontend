@@ -5,6 +5,7 @@ import localFont from "next/font/local";
 import Header from "@/components/header";
 import { Providers } from "@/app/providers";
 import "./app.css";
+import SessionWrapper from "./SessionWrapper";
 
 
 const gotham = localFont({
@@ -29,24 +30,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <script
-        async
-        src="https://telegram.org/js/telegram-widget.js?22"
-        data-telegram-login="aspisChecker_bot"
-        data-size="small"
-        data-radius="10"
-        data-auth-url="https://rewards.aspis.finance/"
-        data-request-access="write"
-      ></script>
-      <body
-        className={`${gotham.className} ${anon.variable} flex flex-col min-h-screen w-screen`}
-      >
-        <Providers>
-          <Header />
+    <SessionWrapper>
+      <html lang="en">
+        <script
+          async
+          src="https://telegram.org/js/telegram-widget.js?22"
+          data-telegram-login="aspisChecker_bot"
+          data-size="small"
+          data-radius="10"
+          data-auth-url="https://rewards.aspis.finance/"
+          data-request-access="write"
+        ></script>
+        <body
+          className={`${gotham.className} ${anon.variable} flex flex-col min-h-screen w-screen`}
+        >
+          <Providers>
+            <Header />
 
-          <style>
-            {`
+            <style>
+              {`
 							body {
 								background: fixed
 	                                                                linear-gradient(
@@ -56,10 +58,11 @@ export default function RootLayout({
 								);
 							}
 						`}
-          </style>
-          {children}
-        </Providers>
-      </body>
-    </html>
+            </style>
+            {children}
+          </Providers>
+        </body>
+      </html>
+    </SessionWrapper>
   );
 }

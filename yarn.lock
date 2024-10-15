@@ -5404,9 +5404,9 @@ jiti@^1.21.0:
   integrity sha512-2yTgeWTWzMWkHu6Jp9NKgePDaYHbntiwvYuuJLbbN9vl7DC9DvXKOB2BC3ZZ92D3cvV/aflH0osDfwpHepQ53w==
 
 jose@^5.1.0:
-  version "5.9.2"
-  resolved "https://registry.yarnpkg.com/jose/-/jose-5.9.2.tgz#22a22da06edb8fb9e583aa24bafc1e8457b4db92"
-  integrity sha512-ILI2xx/I57b20sd7rHZvgiiQrmp2mcotwsAH+5ajbpFQbrYVQdNHYlQhoA5cFb78CgtBOxtC05TeA+mcgkuCqQ==
+  version "5.9.4"
+  resolved "https://registry.yarnpkg.com/jose/-/jose-5.9.4.tgz#70cd388f1e651bc23d138533758f287d777ff6ea"
+  integrity sha512-WBBl6au1qg6OHj67yCffCgFR3BADJBXN8MdRvCgJDuMv3driV2nHr7jdGvaKX9IolosAsn+M0XRArqLXUhyJHQ==
 
 js-sha3@0.8.0:
   version "0.8.0"
@@ -5998,9 +5998,9 @@ npm-run-path@^5.1.0:
     path-key "^4.0.0"
 
 oauth4webapi@^2.3.0:
-  version "2.16.0"
-  resolved "https://registry.yarnpkg.com/oauth4webapi/-/oauth4webapi-2.16.0.tgz#eec1ca9863e5f7faf6fb0a6b1c9a0ec5a09affec"
-  integrity sha512-GyS9/OtMjVNpgT26h9niLRc0G/AAVt2CDzFpljE75+EUNMHcZZeFge7F33QzhULSWfFo3tWBi72UxHuZ8cjAsQ==
+  version "2.17.0"
+  resolved "https://registry.yarnpkg.com/oauth4webapi/-/oauth4webapi-2.17.0.tgz#4af65bd4dac6761d8e4f2fb20848e82a879a6725"
+  integrity sha512-lbC0Z7uzAFNFyzEYRIC+pkSVvDHJTbEW+dYlSBAlCYDe6RxUkJ26bClhk8ocBZip1wfI9uKTe0fm4Ib4RHn6uQ==
 
 obj-multiplex@^1.0.0:
   version "1.0.0"

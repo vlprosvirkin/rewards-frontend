@@ -1,6 +1,5 @@
 "use client";
 
-import { signIn } from "@/auth";
 import { loginTwitter } from "@/helpers";
 import { useEffect, useState } from "react";
 // import {
