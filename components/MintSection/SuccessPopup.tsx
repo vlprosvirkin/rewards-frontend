@@ -17,6 +17,7 @@ import kartinka2 from "@/public/modal/right.png";
 import { getCode, mint } from "../InviteSection/getCode";
 import { useSDK } from "@metamask/sdk-react";
 import { toast } from "react-toastify";
+import { useWindowSize } from "@/hooks/useWindowSize";
 
 export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
   const [isMinting, setIsMinting] = useState(false);
@@ -204,6 +205,7 @@ const Congratulations: React.FC<GratzProps> = ({
   tryAgain,
   hash,
 }) => {
+  const { isMobile } = useWindowSize();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
@@ -218,7 +220,9 @@ const Congratulations: React.FC<GratzProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={closeModal} isCentered>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent style={{
+        maxWidth: isMobile ? "95%" : "700px",
+      }}>
         <ModalBody className="text-center backdrop-blur-md rounded-[18px] border border-white/[.09] overflow-hidden min-h-1/3">
           <div className="z-50 py-10">
             {!isError ? (

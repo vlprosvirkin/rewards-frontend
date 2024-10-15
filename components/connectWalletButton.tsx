@@ -528,10 +528,10 @@ export default function ConnectWalletButton() {
           onClick={handleClick}
         >
           {`${account
-              ? account?.substring(0, 5) +
-              "..." +
-              account?.substring(account?.length - 5, acc?.length)
-              : "Connect"
+            ? account?.substring(0, 5) +
+            "..." +
+            account?.substring(account?.length - 5, acc?.length)
+            : "Connect"
             }`}
         </button>
         {!isMobile && showDisconnect && (
@@ -549,7 +549,7 @@ export default function ConnectWalletButton() {
         <ModalOverlay />
         <ModalContent
           style={{
-            maxWidth: isMobile ? "90%" : "",
+            maxWidth: isMobile ? "700px" : "",
             backgroundColor: "rgb(19 16 36 / 84%)",
           }}
         >

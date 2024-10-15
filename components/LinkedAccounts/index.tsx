@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 // 	signInWithTwitter,
 // } from "@/components/SignInTwitter/sign-in";
 import { config } from "@/config";
-import { useSession } from "next-auth/react";
 import { useSDK } from "@metamask/sdk-react";
 // import { linkTgAccount } from "@/app/profile/link";
 import { CoolButton } from "../CoolButton";
@@ -18,15 +17,14 @@ import XLogo from "@/public/images/X_logo.png";
 import TelegramLogo from "@/public/images/telegram-logo.png";
 import Image from "next/image";
 import { getCode } from "../InviteSection/getCode";
-import axios from "axios";
 import { toast } from "react-toastify";
+import { linkTgAccount } from "@/app/profile/link";
 
 export function LinkedAccounts({ setActiveTab }: any) {
+  const { isMobile } = useWindowSize();
   const [tgAccount, setTgAccount] = useState<boolean>(false);
   const [email, setEmail] = useState("");
-  const session = useSession();
   const { account } = useSDK();
-  const [user, setUser] = useState<any>();
 
   useEffect(() => {
     const doAsync = async () => {
@@ -43,38 +41,24 @@ export function LinkedAccounts({ setActiveTab }: any) {
     tgAccount ? console.log(tgAccount) : null;
   }, [tgAccount]);
 
-  // const test = async (id: number) => {
-  //   console.log("Linking this tg account: ", id);
+  const connectTgAccountToUser = async (id: number) => {
+    try {
+      await linkTgAccount({ address: account, tgId: id });
+      toast.success("Telegram account linked successfully");
+    } catch (e) {
+      console.log(e)
+      toast.error("Error linking telegram account");
+    }
+  };
 
-  //   linkTgAccount({ address: account, tgId: id });
-  // };
-  // 6819890766
-  const connectTgAccount = () => {
-    // window.Telegram.Login.auth({ bot_id: bot_id }, (data: any) => {
-    //   if (data) {
-    //     test(data?.id);
-    //   }
-    // });
+  const connectTgAccount = async () => {
     window.Telegram.Login.auth({ bot_id: 6819890766 }, (data: any) => {
-      console.log(data);
       if (data?.user?.id || data?.id) {
-        console.log(data);
         (data.user || data.id) && setTgAccount(true);
         toast.loading("Linking telegram account...");
-        axios
-          .post("", {
-            twitterId: null,
-            telegramId: data?.user?.id ?? data?.id,
-          })
-          .then((res) => {
-            console.log(res);
-            toast.dismiss();
-            toast.success("Telegram account linked successfully");
-          })
-          .catch((err) => {
-            toast.dismiss();
-            toast.error("Error linking telegram account");
-          });
+
+        connectTgAccountToUser(data.user.id)
+
         //   {
         //     "user": {
         //         "id": 33333333,
@@ -92,7 +76,7 @@ export function LinkedAccounts({ setActiveTab }: any) {
     });
   };
 
-  const { windowSize, isMobile } = useWindowSize();
+
   return (
     <div className="flex flex-col min-w-full">
       <b

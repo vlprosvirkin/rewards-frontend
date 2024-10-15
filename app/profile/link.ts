@@ -8,8 +8,6 @@ interface props {
 }
 
 export const linkTgAccount = async ({ address, tgId }: props) => {
-  console.log(`sending ${tgId} to ${address}`);
-
   const { data } = await axios.post(
     `https://api-rewards.aspis.finance/v1/users/add-ids/${address}`,
     {
