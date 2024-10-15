@@ -17,10 +17,10 @@ import { useEffect, useState } from "react";
 import toleft from "@/public/characters/toleft.svg";
 import toright from "@/public/characters/toright.svg";
 import { CoolButton } from "@/components";
-import { getCode } from "@/components/InviteSection/getCode";
+import { getCode, upgradeChar } from "@/components/InviteSection/getCode";
 import { useSDK } from "@metamask/sdk-react";
-import { lvlUp } from "./upgrade";
 import { useWindowSize } from "@/hooks/useWindowSize";
+import { toast } from "react-toastify";
 
 const costs = [0, 100, 200, 400, 800, 1200, 2000, 3000, 4000, 8000];
 
@@ -169,7 +169,22 @@ export default function Characters() {
                 className={`py-[14px] px-[42px] font-bold text-white ${
                   !canMint && "opacity-50"
                 } bg-white/[.05] rounded-xl w-fit mr-3 `}
-                onClick={() => lvlUp(account)}
+                onClick={
+                  account
+                    ? () =>
+                        upgradeChar(account)
+                          .then((res) => {
+                            console.log("res", res);
+                            if (res) {
+                              toast.success("Character upgraded");
+                            }
+                          })
+                          .catch((err) => {
+                            console.log("err", err);
+                            toast.error("Error upgrading character");
+                          })
+                    : () => toast.info("Connect your wallet")
+                }
               >
                 Upgrade
               </button>

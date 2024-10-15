@@ -15,7 +15,6 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useSDK } from "@metamask/sdk-react";
 import { getCode } from "@/components/InviteSection/getCode";
-import { lvlUp } from "./upgrade";
 
 const costs = [0, 100, 200, 400, 800, 1200, 2000, 3000, 4000, 8000];
 

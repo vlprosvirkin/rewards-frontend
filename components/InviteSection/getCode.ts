@@ -25,15 +25,20 @@ export const getCode = async (address: string) => {
   return data;
 };
 
-export const upgradeChar = async (account: string) =>
-  await axios.post("https://api-rewards.aspis.finance/v1/users/upgradeChar", {
-    address: account,
-    withCredentials: true,
-    headers: {
-      accept: "application/json",
-      "Content-Type": "application/json",
-    },
-  });
+export const upgradeChar = async (account: string) => {
+  const { data } = await axios.post(
+    "https://api-rewards.aspis.finance/v1/users/upgradeChar",
+    {
+      address: account,
+      withCredentials: true,
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return data;
+};
 
 export const mint = async (recipientAddress: string) => {
   const { data } = await axios.get(
@@ -65,5 +70,21 @@ export const setRef = async (referralLink: string, account: string) => {
       return res.data;
     });
   console.log(data);
+  return data;
+};
+
+export const getLeaderboard = async () => {
+  const { data } = await axios.get(
+    "https://api-rewards.aspis.finance/v1/users/top",
+    {
+      withCredentials: true,
+
+      headers: {
+        "Content-Type": "application/json",
+        accept: "application/json",
+      },
+    }
+  );
+
   return data;
 };

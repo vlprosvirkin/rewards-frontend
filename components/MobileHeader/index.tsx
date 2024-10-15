@@ -43,24 +43,25 @@ const boxStyle = {
   alignItems: "center",
 };
 
-export const MobileHeader: React.FC = () => {
+export const MobileHeader = ({
+  user,
+  account,
+}: {
+  user: any;
+  account: string | undefined;
+}) => {
   const [points, setPoints] = useState<any>();
-  const { account } = useSDK();
   const currentPath = usePathname();
   const pageName = currentPath?.split("/")[1];
-
-  useEffect(() => {
-    const doAsync = async () => {
-      const data = await getCode(`${account}`);
-      setPoints(data?.totalPoints);
-    };
-
-    doAsync();
-  }, [account]);
 
   const [isVisible, setIsVisible] = useState(true); // Управляем видимостью
   const [lastScrollY, setLastScrollY] = useState(0); // Храним последнее положение прокрутки
 
+  useEffect(() => {
+    if (user) {
+      setPoints(user.points);
+    }
+  }, [user]);
   const handleScroll = () => {
     const currentScrollY = window.scrollY;
 

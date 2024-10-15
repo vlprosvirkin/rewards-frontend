@@ -18,7 +18,9 @@ import { useSDK } from "@metamask/sdk-react";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import PulseLogoLoader from "@/components/PulseLogo";
 import { toast } from "react-toastify";
+
 const costs = [0, 100, 200, 400, 800, 1200, 2000, 3000, 4000, 8000];
+
 export const charactersData = [
   {
     name: "Hoplite",
@@ -159,22 +161,15 @@ export default function Characters() {
   const lvlUp = async () => {
     if (!account) return toast.error("Please connect your wallet first.");
     toast.loading("Upgrading character...");
-    toast.loading("Upgrading character...");
     await upgradeChar(account)
       .then((res) => {
-        console.log(res.data);
-        toast.dismiss();
-        toast.success("Character upgraded successfully!");
+        console.log(res);
         toast.dismiss();
         toast.success("Character upgraded successfully!");
         setCharLvl(charLvl + 1);
       })
       .catch((err) => {
         console.log(err);
-        toast.dismiss();
-        toast.error(
-          "Error upgrading character! " + (err?.response?.data?.message ?? err)
-        );
         toast.dismiss();
         toast.error(
           "Error upgrading character! " + (err?.response?.data?.message ?? err)

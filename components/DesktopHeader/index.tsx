@@ -8,19 +8,19 @@ import { useEffect, useState } from "react";
 import { useSDK } from "@metamask/sdk-react";
 import { getCode } from "../InviteSection/getCode";
 
-export const DesktopHeader: React.FC = () => {
+export const DesktopHeader = ({
+  user,
+  account,
+}: {
+  user: any;
+  account: string | undefined;
+}) => {
   const [points, setPoints] = useState<any>();
-  const { account } = useSDK();
-  const doAsync = async () => {
-    if (!account) return;
-    const data = await getCode(account);
-    console.log(data);
-    setPoints(Number(data?.totalPoints));
-  };
-
   useEffect(() => {
-    doAsync();
-  }, [account]);
+    if (user) {
+      setPoints(user.totalPoints);
+    }
+  }, [user]);
 
   const currentPath = usePathname();
 

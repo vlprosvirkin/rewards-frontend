@@ -143,6 +143,7 @@ export default function AllTasks({ category }: any) {
     if (!account || !selectedTask) return alert("Please connect your wallet");
     try {
       setTaskStatus("Verifying...  ");
+      toast.loading("Verifying task completion...");
       // toast.loading("Verifying task completion...");
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -154,7 +155,7 @@ export default function AllTasks({ category }: any) {
       toast.dismiss();
       console.log("Task completion response:", res);
       if (res.message) {
-        if (res.message === "Quest completed successfully") {
+        if (res.message && res.message === "Quest completed") {
           setTaskStatus("Success!");
           toast.success("Task completed successfully");
           const userData = user;

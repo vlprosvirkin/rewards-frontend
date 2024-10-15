@@ -1,10 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
-import list from "./test.json";
-import { getLeaderboard } from "./getLeaderboard";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import PulseLogoLoader from "@/components/PulseLogo";
 import { useSDK } from "@metamask/sdk-react";
+import { getLeaderboard } from "@/components/InviteSection/getCode";
 
 interface Item {
   place: number;
@@ -66,9 +65,9 @@ export default function Leaderboard() {
 
   useEffect(() => {
     const doAsync = async () => {
+      console.log("RRR");
       const res = await getLeaderboard();
       setData(res?.filter((item: Item) => item.address !== account));
-      if (!account) return;
       const user = res?.find((item: Item) => item.address === account);
       user && setUser(user);
       console.log("user", user);
