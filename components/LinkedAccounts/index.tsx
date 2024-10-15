@@ -57,11 +57,11 @@ export function LinkedAccounts({ setActiveTab }: any) {
       window.Telegram.Login.auth({ bot_id: 6819890766 }, (data: any) => {
         console.log('tgData', data)
         if (data?.user?.id || data?.id) {
-          (data.user || data.id) && setTgAccount(true);
+          setTgAccount(true);
           console.log('tgData after', data)
           toast.loading("Linking telegram account...");
 
-          connectTgAccountToUser(data.user.id || data?.id)
+          connectTgAccountToUser(data?.user?.id || data?.id)
 
           //   {
           //     "user": {
