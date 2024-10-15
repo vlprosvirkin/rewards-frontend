@@ -43,36 +43,46 @@ export function LinkedAccounts({ setActiveTab }: any) {
   const connectTgAccountToUser = async (id: number) => {
     try {
       await linkTgAccount({ address: account, tgId: id });
+      toast.dismiss()
       toast.success("Telegram account linked successfully");
     } catch (e) {
       console.log(e)
+      toast.dismiss()
       toast.error("Error linking telegram account");
     }
   };
 
   const connectTgAccount = async () => {
-    window.Telegram.Login.auth({ bot_id: 6819890766 }, (data: any) => {
-      if (data?.user?.id || data?.id) {
-        (data.user || data.id) && setTgAccount(true);
-        toast.loading("Linking telegram account...");
+    try {
+      window.Telegram.Login.auth({ bot_id: 6819890766 }, (data: any) => {
+        console.log('tgData', data)
+        if (data?.user?.id || data?.id) {
+          (data.user || data.id) && setTgAccount(true);
+          console.log('tgData after', data)
+          toast.loading("Linking telegram account...");
 
-        connectTgAccountToUser(data.user.id)
+          connectTgAccountToUser(data.user.id)
 
-        //   {
-        //     "user": {
-        //         "id": 33333333,
-        //         "first_name": "Ivan",
-        //         "last_name": "Ivanov",
-        //         "username": "Ivan_Ivanov",
-        //         "photo_url": "https:\/\/t.me\/i\/userpic\/320\/5unTUeP74dR77kq0CTHk_baZ7_SM_FN9rx1HxKFHiWk.jpg",
-        //         "auth_date": 1728211141,
-        //         "hash": "a41b769fe2b0fa65c3c43741e2546d3dda5553a98601d69bef71a24cab29af3b"
-        //     },
-        //     "html": "<button class=\"btn tgme_widget_login_button\" onclick=\"return TWidgetLogin.auth();\"><i class=\"tgme_widget_login_button_icon\"><\/i>Войти как <span dir=\"auto\">Yan<\/span><\/button><i class=\"tgme_widget_login_user_photo bgcolor5\" data-content=\"Y\" onclick=\"return TWidgetLogin.auth();\"><img src=\"https:\/\/cdn4.telesco.pe\/file\/QhCHe0lPnNzDB5KOHIqRPybvwakA4L7r8IXXeWWxZx2UDgHlRuLxivZk6xnX30Ov76vXGr8Qq0h3OST_7ulNhuCeBitCyDvWBsKuP6dGAJKy9MRKa6LNeIEA51GJUL6X9UWeLWudpwWFnUbFNspZOpvjSupZxjwImMNj9Lb9J8BehVSTIyTlIm4vV-k9o04wX-pmuPPkVfxyQFHRFaIMq2FgsD-d4OBIaSIqQf1aVzLN9mDz5fOT2HddEAX_w1LEaXXDqNo3sBHo4d5qgRHh7BAQWxtk-fw5KY5reSoj2W5jGbQ_Y3PIrkTb59sCW2nsyHomE6RX1RexqTODXz27uw.jpg\"><\/i>",
-        //     "origin": "https:\/\/rewards.aspis.finance"
-        // }
-      }
-    });
+          //   {
+          //     "user": {
+          //         "id": 33333333,
+          //         "first_name": "Ivan",
+          //         "last_name": "Ivanov",
+          //         "username": "Ivan_Ivanov",
+          //         "photo_url": "https:\/\/t.me\/i\/userpic\/320\/5unTUeP74dR77kq0CTHk_baZ7_SM_FN9rx1HxKFHiWk.jpg",
+          //         "auth_date": 1728211141,
+          //         "hash": "a41b769fe2b0fa65c3c43741e2546d3dda5553a98601d69bef71a24cab29af3b"
+          //     },
+          //     "html": "<button class=\"btn tgme_widget_login_button\" onclick=\"return TWidgetLogin.auth();\"><i class=\"tgme_widget_login_button_icon\"><\/i>Войти как <span dir=\"auto\">Yan<\/span><\/button><i class=\"tgme_widget_login_user_photo bgcolor5\" data-content=\"Y\" onclick=\"return TWidgetLogin.auth();\"><img src=\"https:\/\/cdn4.telesco.pe\/file\/QhCHe0lPnNzDB5KOHIqRPybvwakA4L7r8IXXeWWxZx2UDgHlRuLxivZk6xnX30Ov76vXGr8Qq0h3OST_7ulNhuCeBitCyDvWBsKuP6dGAJKy9MRKa6LNeIEA51GJUL6X9UWeLWudpwWFnUbFNspZOpvjSupZxjwImMNj9Lb9J8BehVSTIyTlIm4vV-k9o04wX-pmuPPkVfxyQFHRFaIMq2FgsD-d4OBIaSIqQf1aVzLN9mDz5fOT2HddEAX_w1LEaXXDqNo3sBHo4d5qgRHh7BAQWxtk-fw5KY5reSoj2W5jGbQ_Y3PIrkTb59sCW2nsyHomE6RX1RexqTODXz27uw.jpg\"><\/i>",
+          //     "origin": "https:\/\/rewards.aspis.finance"
+          // }
+        }
+      });
+    } catch (e) {
+      console.log(e)
+      toast.dismiss()
+    }
+
   };
 
 
