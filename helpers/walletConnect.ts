@@ -21,7 +21,7 @@ export async function createWeb3Wallet(): Promise<IWeb3Wallet> {
     const clientId =
       await web3wallet.engine.signClient.core.crypto.getClientId();
     console.log("WalletConnect ClientID: ", clientId);
-    window?.localStorage.setItem("WALLETCONNECT_CLIENT_ID", clientId);
+    window?.localStorage?.setItem("WALLETCONNECT_CLIENT_ID", clientId);
   } catch (error) {
     console.error(
       "Failed to set WalletConnect clientId in localStorage: ",

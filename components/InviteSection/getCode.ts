@@ -9,20 +9,24 @@ interface props {
 }
 
 export const getCode = async (address: string) => {
-  if (!address) {
+  if (!address || address === undefined || address === 'undefined') {
     return null;
   }
-  const { data } = await axios.get(
-    `https://api-rewards.aspis.finance/v1/users/${address}`,
-    {
-      headers: {
-        accept: "application/json",
-        withCredentials: true,
-      },
-    }
-  );
-
-  return data;
+  try {
+    const { data } = await axios.get(
+      `https://api-rewards.aspis.finance/v1/users/${address}`,
+      {
+        headers: {
+          accept: "application/json",
+          withCredentials: true,
+        },
+      }
+    );
+    return data;
+  } catch(e) {
+    console.log(e)
+  }
+  
 };
 
 export const upgradeChar = async (account: string) => {

@@ -36,9 +36,8 @@ const formatCode = (input: string): string => {
 const CopyNotification = ({ copied }: { copied: boolean }) => {
   return (
     <span
-      className={`ml-auto mb-2 h-fit w-fit px-2 text-center text-[#BCFE1E] bg-[#BCFE1E29] rounded-[10px] py-0 text-[10px] transition-opacity duration-200 ${
-        copied ? "opacity-100" : "opacity-0"
-      }`}
+      className={`ml-auto mb-2 h-fit w-fit px-2 text-center text-[#BCFE1E] bg-[#BCFE1E29] rounded-[10px] py-0 text-[10px] transition-opacity duration-200 ${copied ? "opacity-100" : "opacity-0"
+        }`}
       style={{ cursor: "pointer" }}
     >
       copied
@@ -91,7 +90,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
       if (account && !user) {
         const user = await getCode(account);
         if (user) {
-          window?.localStorage.setItem("user", JSON.stringify(user));
+          window?.localStorage?.setItem("user", JSON.stringify(user));
           setUser(user);
           console.log("user", user);
         }
@@ -131,7 +130,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
       setReferrees(user?.regPoints);
       setStreak(data?.strikeCount);
       console.log(user);
-      window?.localStorage.setItem("user", JSON.stringify(user));
+      window?.localStorage?.setItem("user", JSON.stringify(user));
       if (user?.charLvl) {
         const userChar = charactersData.find((c) =>
           c.levels.includes(user.charLvl)
@@ -143,8 +142,8 @@ export function ProfileGeneral({ setActiveTab }: any) {
           userChar?.levels[0] === user.charLvl
             ? 0
             : userChar?.levels[1] === user.charLvl
-            ? 1
-            : 2
+              ? 1
+              : 2
         );
       }
     };
@@ -170,7 +169,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
   const [userChar, setUserChar] = useState<any>(null);
   const [imgIndex, setImgIndex] = useState<any>(0);
 
-  useEffect(() => {}, [user]);
+  useEffect(() => { }, [user]);
 
   const { isMobile } = useWindowSize();
 
@@ -181,17 +180,16 @@ export function ProfileGeneral({ setActiveTab }: any) {
         style={
           isMobile
             ? {
-                maxWidth: "90%",
-                alignContent: "center",
-                justifyContent: "center",
-              }
+              maxWidth: "90%",
+              alignContent: "center",
+              justifyContent: "center",
+            }
             : {}
         }
       >
         <div
-          className={`flex w-full relative bg-[#5F5F5F] rounded-full px-${
-            isMobile ? 0 : 8
-          } mb-4`}
+          className={`flex w-full relative bg-[#5F5F5F] rounded-full px-${isMobile ? 0 : 8
+            } mb-4`}
           style={isMobile ? { marginLeft: "6%" } : {}}
         >
           <div

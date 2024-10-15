@@ -56,6 +56,7 @@ export function LinkedAccounts({ setActiveTab }: any) {
     //   }
     // });
     window.Telegram.Login.auth({ bot_id: 6819890766 }, (data: any) => {
+      console.log(data);
       if (data?.user?.id || data?.id) {
         console.log(data);
         (data.user || data.id) && setTgAccount(true);

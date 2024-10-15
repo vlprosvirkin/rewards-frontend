@@ -63,7 +63,9 @@ export default function MissionsHub() {
     const doAsync = async () => {
       const data = await getCode(`${account}`);
       // console.log("fetched streak:", data.strikeCount);
-      setStreak(data.strikeCount);
+      if (data) {
+        setStreak(data.strikeCount);
+      }
     };
 
     doAsync();
@@ -86,9 +88,8 @@ export default function MissionsHub() {
     return null;
   }
 
-  const tabStyle = `py-${isMobile ? 1 : 3}  text-[${
-    isMobile ? 11 : 16
-  }px] rounded-[27px] px-${isMobile ? 2 : 4}`;
+  const tabStyle = `py-${isMobile ? 1 : 3}  text-[${isMobile ? 11 : 16
+    }px] rounded-[27px] px-${isMobile ? 2 : 4}`;
 
   const isTabActive = (tab: string) => {
     return activeTab == tab
@@ -117,9 +118,8 @@ export default function MissionsHub() {
         }}
       >
         <div
-          className={`flex text-[#595959] gap-[${
-            isMobile ? 10 : 20
-          }px] mb-8 mx-11`}
+          className={`flex text-[#595959] gap-[${isMobile ? 10 : 20
+            }px] mb-8 mx-11`}
         >
           <button
             className={tabStyle + isTabActive("all")}
@@ -219,11 +219,11 @@ export default function MissionsHub() {
             style={
               isMobile
                 ? {
-                    display: "flex",
-                    maxWidth: 60,
-                    justifyContent: "center",
-                    textAlign: "center",
-                  }
+                  display: "flex",
+                  maxWidth: 60,
+                  justifyContent: "center",
+                  textAlign: "center",
+                }
                 : {}
             }
           >

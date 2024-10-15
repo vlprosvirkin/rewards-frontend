@@ -80,44 +80,27 @@ export default function Characters() {
     }
     return { characterIndex: 0, levelIndex: 0 };
   };
-  useEffect(() => {
-    console.log("char:", selectedCharacterIndex);
-  }, [selectedCharacterIndex]);
-  const doAsync = async (upd = false) => {
-    if (!account) return;
-    const data = await getCode(account).catch((err) => {
-      console.log(err);
-      return { data: undefined };
-    });
-    console.log("fetched streak:", data);
-    if (data) {
-      setCharLvl(data?.charLvl);
-      setTotalPoints(data.totalPoints);
-
-      const { characterIndex, levelIndex } = getCharacterAndLevel(data.charLvl);
-      upd && setSelectedCharacterIndex(characterIndex);
-      upd && setSelectedLevelIndex(levelIndex);
-      upd && setTotalPoints(data.totalPoints);
-    }
-  };
-
-  const [updateCount, setUpdateCount] = useState<number>(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setUpdateCount((prev) => prev + 1);
-    }, 5000);
+    (async () => {
+      if (!account) return;
+      const user = await getCode(account)
 
-    // return () => clearInterval(interval);
-  }, []);
-  useEffect(() => {
-    doAsync(false);
-  }, [updateCount]);
-  useEffect(() => {
-    doAsync(true);
-  }, []);
+      if (user) {
+        setCharLvl(user?.charLvl);
+        setTotalPoints(user.totalPoints);
+
+        const { characterIndex, levelIndex } = getCharacterAndLevel(user.charLvl);
+        setSelectedCharacterIndex(characterIndex);
+        setSelectedLevelIndex(levelIndex);
+        setTotalPoints(user.totalPoints);
+      }
+    })()
+  }, [account]);
+
   const selectedLevel =
     charactersData[selectedCharacterIndex].levels[selectedLevelIndex];
+
   useEffect(() => {
     const computeCostToUpgrade = (selectedLevel: number) => {
       return costs[selectedLevel];
@@ -160,6 +143,7 @@ export default function Characters() {
   if (!windowSize?.width) return <PulseLogoLoader />;
   const lvlUp = async () => {
     if (!account) return toast.error("Please connect your wallet first.");
+
     toast.loading("Upgrading character...");
     await upgradeChar(account)
       .then((res) => {
@@ -176,13 +160,6 @@ export default function Characters() {
         );
       });
   };
-  console.log(
-    "selectedLevel",
-    selectedLevel,
-    charLvl,
-    pointsNeeded,
-    totalPoints
-  );
 
   return (
     <>
@@ -217,7 +194,7 @@ export default function Characters() {
               <Image
                 src={
                   charactersData[selectedCharacterIndex].images[
-                    selectedLevelIndex
+                  selectedLevelIndex
                   ]
                 }
                 alt=""
@@ -230,17 +207,15 @@ export default function Characters() {
             <div className="flex mb-6">
               <button
                 onClick={handleLeftClick}
-                className={`mr-auto bg-white/[.05] py-4 pl-5 pr-6 rounded-full border-white ${
-                  selectedCharacterIndex <= 0 && "opacity-50"
-                }`}
+                className={`mr-auto bg-white/[.05] py-4 pl-5 pr-6 rounded-full border-white ${selectedCharacterIndex <= 0 && "opacity-50"
+                  }`}
                 style={isMobile ? { translate: "-20px -130px" } : undefined}
               >
                 <Image src={toleft} alt="" />
               </button>
               <span
-                className={`mx-auto text-white text-anon text-center text-${
-                  isMobile ? 3 : 5
-                }xl leading-[54px]`}
+                className={`mx-auto text-white text-anon text-center text-${isMobile ? 3 : 5
+                  }xl leading-[54px]`}
               >
                 {charactersData[selectedCharacterIndex].name}
               </span>
@@ -254,10 +229,9 @@ export default function Characters() {
               )}
               <button
                 onClick={handleRightClick}
-                className={`ml-auto bg-white/[.05] py-4 pl-6 pr-5 rounded-full border-white ${
-                  selectedCharacterIndex >= charactersData.length - 1 &&
+                className={`ml-auto bg-white/[.05] py-4 pl-6 pr-5 rounded-full border-white ${selectedCharacterIndex >= charactersData.length - 1 &&
                   "opacity-50"
-                }`}
+                  }`}
                 style={isMobile ? { translate: "20px -130px" } : undefined}
               >
                 <Image src={toright} alt="" />
@@ -269,13 +243,11 @@ export default function Characters() {
                 (level, index) => (
                   <button
                     key={level}
-                    className={`font-bold tracking-[0.3rem] text-[${
-                      isMobile ? 12 : 13
-                    }px] ${
-                      selectedLevelIndex !== index
+                    className={`font-bold tracking-[0.3rem] text-[${isMobile ? 12 : 13
+                      }px] ${selectedLevelIndex !== index
                         ? "text-white/[.5]"
                         : "text-[#BCFE1E]"
-                    } ${level > charLvl ? "opacity-50" : ""}`}
+                      } ${level > charLvl ? "opacity-50" : ""}`}
                     onClick={() => {
                       setSelectedLevelIndex(index);
                     }}
@@ -305,9 +277,8 @@ export default function Characters() {
 
             <div className="flex mx-auto items-center">
               <button
-                className={`py-[14px] px-[42px] font-bold text-white ${
-                  pointsNeeded > 0 ? "opacity-50" : ""
-                } bg-white/[.05] rounded-xl w-fit mr-3`}
+                className={`py-[14px] px-[42px] font-bold text-white ${pointsNeeded > 0 ? "opacity-50" : ""
+                  } bg-white/[.05] rounded-xl w-fit mr-3`}
                 onClick={() => lvlUp()}
                 disabled={
                   !account ||
@@ -330,9 +301,8 @@ export default function Characters() {
           </div>
         </div>
         <div
-          className={`flex flex-${isMobile ? "row" : "col"} mb-auto mt-10 gap-${
-            isMobile ? 2 : 12
-          } ml-auto`}
+          className={`flex flex-${isMobile ? "row" : "col"} mb-auto mt-10 gap-${isMobile ? 2 : 12
+            } ml-auto`}
         >
           <div className={`flex w-1/2 h-1/2 gap-${isMobile ? 2 : 10} mb-12`}>
             {charactersData.slice(0, 2).map((character, index) => {
@@ -340,9 +310,8 @@ export default function Characters() {
               return (
                 <div
                   key={character.name}
-                  className={`relative ${
-                    !isUnlocked && "opacity-50"
-                  } cursor-pointer`}
+                  className={`relative ${!isUnlocked && "opacity-50"
+                    } cursor-pointer`}
                   onClick={() => handleGridCharacterClick(index)}
                 >
                   <Image
@@ -360,7 +329,7 @@ export default function Characters() {
                       <span
                         className={
                           "absolute left-1/2 -translate-x-1/2 text-anon" +
-                          isMobile
+                            isMobile
                             ? " text-[14px]"
                             : ""
                         }
@@ -385,9 +354,8 @@ export default function Characters() {
               return (
                 <div
                   key={character.name}
-                  className={`relative ${
-                    !isUnlocked && "opacity-50"
-                  } cursor-pointer`}
+                  className={`relative ${!isUnlocked && "opacity-50"
+                    } cursor-pointer`}
                   onClick={() => handleGridCharacterClick(index + 2)}
                 >
                   <Image
@@ -405,7 +373,7 @@ export default function Characters() {
                       <span
                         className={
                           "absolute left-1/2 -translate-x-1/2 text-anon" +
-                          isMobile
+                            isMobile
                             ? " text-[14px]"
                             : ""
                         }

@@ -37,7 +37,7 @@ export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
   };
   const [user, setUser] = useState({});
   useEffect(() => {
-    const user = localStorage.getItem("user");
+    const user = localStorage?.getItem("user");
     if (user) {
       const user_ = JSON.parse(user);
       setUser(user_);

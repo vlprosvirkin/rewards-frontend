@@ -8,21 +8,18 @@ import { useEffect, useState } from "react";
 import { useSDK } from "@metamask/sdk-react";
 import { getCode } from "../InviteSection/getCode";
 
-export const DesktopHeader = ({
-  user,
-  account,
-}: {
-  user: any;
-  account: string | undefined;
-}) => {
-  const [points, setPoints] = useState<any>();
-  useEffect(() => {
-    if (user) {
-      setPoints(user.totalPoints);
-    }
-  }, [user]);
-
+export const DesktopHeader: React.FC = () => {
+  const { account } = useSDK();
   const currentPath = usePathname();
+  const [points, setPoints] = useState<any>();
+
+  useEffect(() => {
+    (async () => {
+      if (!account) return;
+      const data = await getCode(account);
+      setPoints(Number(data?.totalPoints) ?? 0);
+    })()
+  }, [account]);
 
   return (
     <header className="flex relative py-5 px-7 items-center z-200">
@@ -36,50 +33,44 @@ export const DesktopHeader = ({
       >
         <Link
           href="/"
-          className={`${
-            currentPath == "/" ? "text-white" : "text-[#ADADAD]"
-          } text-sm flex items-center`}
+          className={`${currentPath == "/" ? "text-white" : "text-[#ADADAD]"
+            } text-sm flex items-center`}
         >
           Story
         </Link>
         <Link
           href="/missions"
-          className={`${
-            currentPath == "/missions" ? "text-white" : "text-[#ADADAD]"
-          } text-sm flex items-center`}
+          className={`${currentPath == "/missions" ? "text-white" : "text-[#ADADAD]"
+            } text-sm flex items-center`}
         >
           Missions Hub
         </Link>
         <Link
           href="/leaderboard"
-          className={`${
-            currentPath == "/leaderboard" ? "text-white" : "text-[#ADADAD]"
-          } text-sm flex items-center`}
+          className={`${currentPath == "/leaderboard" ? "text-white" : "text-[#ADADAD]"
+            } text-sm flex items-center`}
         >
           Leaderboard
         </Link>
         <Link
           href="/characters"
-          className={`${
-            currentPath == "/characters" ? "text-white" : "text-[#ADADAD]"
-          } text-sm flex items-center`}
+          className={`${currentPath == "/characters" ? "text-white" : "text-[#ADADAD]"
+            } text-sm flex items-center`}
         >
           Characters
         </Link>
         <Link
           href="https://app.aspis.finance/"
           target="_blank"
-          className={`${
-            currentPath == "/app" ? "text-white" : "text-[#ADADAD]"
-          } text-sm flex items-center`}
+          className={`${currentPath == "/app" ? "text-white" : "text-[#ADADAD]"
+            } text-sm flex items-center`}
         >
           App
         </Link>
         <Link
           href="/profile"
-          className={`${
-            currentPath == "/profile" ? "text-white" : "text-[#ADADAD]"
-          } text-sm flex items-center`}
+          className={`${currentPath == "/profile" ? "text-white" : "text-[#ADADAD]"
+            } text-sm flex items-center`}
         >
           Profile
         </Link>

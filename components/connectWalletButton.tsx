@@ -67,19 +67,19 @@ export default function ConnectWalletButton() {
   const { windowSize, isMobile } = useWindowSize();
 
   /*
-		const [account, setAccount] = useState<string>();
-	const { sdk, connected, connecting, provider, chainId } = useSDK();
-	const { wallets, connectWallet } = useWalletProvider();
+    const [account, setAccount] = useState<string>();
+  const { sdk, connected, connecting, provider, chainId } = useSDK();
+  const { wallets, connectWallet } = useWalletProvider();
 
-	const connect = async () => {
-		try {
-			const accounts = await sdk?.connect();
-			setAccount(accounts?.[0]);
-		} catch (err) {
-			console.warn("failed to connect..", err);
-		}
-	};
-	*/
+  const connect = async () => {
+    try {
+      const accounts = await sdk?.connect();
+      setAccount(accounts?.[0]);
+    } catch (err) {
+      console.warn("failed to connect..", err);
+    }
+  };
+  */
 
   // ###########################################################################
 
@@ -145,7 +145,7 @@ export default function ConnectWalletButton() {
   }, [acc]);
 
   const changeLanguage = async (currentLanguage: string) => {
-    localStorage.setItem("MetaMaskSDKLng", currentLanguage);
+    localStorage?.setItem("MetaMaskSDKLng", currentLanguage);
     window.location.reload();
   };
 
@@ -527,20 +527,18 @@ export default function ConnectWalletButton() {
           style={{ width: isMobile ? "100%" : "auto" }}
           onClick={handleClick}
         >
-          {`${
-            account
+          {`${account
               ? account?.substring(0, 5) +
-                "..." +
-                account?.substring(account?.length - 5, acc?.length)
+              "..." +
+              account?.substring(account?.length - 5, acc?.length)
               : "Connect"
-          }`}
+            }`}
         </button>
         {!isMobile && showDisconnect && (
           <div
             ref={disconnectButtonRef}
-            className={`absolute top-1 right-0 translate-y-full transition-all duration-300 transform z-[100] ${
-              dc ? "opacity-100 scale-100" : "opacity-0 scale-95"
-            }`}
+            className={`absolute top-1 right-0 translate-y-full transition-all duration-300 transform z-[100] ${dc ? "opacity-100 scale-100" : "opacity-0 scale-95"
+              }`}
           >
             <DisconnectButton disconnect={disconnect} />
           </div>
@@ -653,9 +651,9 @@ export default function ConnectWalletButton() {
                 onClick={
                   isDisconected
                     ? () => {
-                        setIsModalOpen(false);
-                        router.replace("/");
-                      }
+                      setIsModalOpen(false);
+                      router.replace("/");
+                    }
                     : disconnect
                 }
               >

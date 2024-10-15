@@ -18,6 +18,7 @@ import { useWindowSize } from "@/hooks/useWindowSize";
 import { getCode, mint } from "../InviteSection/getCode";
 import { Spinner } from "../MintSection/Loader";
 import { toast } from "react-toastify";
+import { AxiosError } from "axios";
 
 interface TaskItemProps {
   item: any;
@@ -94,19 +95,9 @@ export default function AllTasks({ category }: any) {
     }
   }, []);
 
-  const [updateCount, setUpdateCount] = useState<number>(0);
-
   useEffect(() => {
-    const interval = setInterval(() => {
-      setUpdateCount((prev) => prev + 1);
-    }, 5000);
-
-    // return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    console.log("user", user);
     (async () => {
+      console.log(account)
       if (account) {
         const user = await getCode(account);
         if (user) {
@@ -116,7 +107,7 @@ export default function AllTasks({ category }: any) {
         }
       }
     })();
-  }, [account, updateCount]);
+  }, [account]);
 
   useEffect(() => {
     const doAsync = async () => {
@@ -143,10 +134,6 @@ export default function AllTasks({ category }: any) {
     if (!account || !selectedTask) return alert("Please connect your wallet");
     try {
       setTaskStatus("Verifying...  ");
-      toast.loading("Verifying task completion...");
-      // toast.loading("Verifying task completion...");
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
       const res = await checkTask(
         selectedTask?.id,
         account,
@@ -171,12 +158,21 @@ export default function AllTasks({ category }: any) {
       } else {
         setTaskStatus("Conditions not met");
       }
-    } catch (e) {
-      console.log(e);
-      toast.error(String(e));
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        if (error.status === 409) {
+          console.error('Axios Error:', error.message);
+          toast.error('Requirements of the quest have not been met');
+          setTaskStatus('')
+          return
+        }
+      }
+      console.log(error);
+      toast.error(String(error));
       setTaskStatus("Something went wrong.");
     }
   };
+
   useEffect(() => {
     if (!isOpen) setTaskStatus(undefined);
   }, [isOpen]);
@@ -282,9 +278,8 @@ export default function AllTasks({ category }: any) {
                   ) : null}
                 </div>
                 <div
-                  className={`flex flex-col ${
-                    isMobile ? "" : "w-1/3"
-                  } h-full mb-4`}
+                  className={`flex flex-col ${isMobile ? "" : "w-1/3"
+                    } h-full mb-4`}
                 >
                   <div className={`relative h-full`}>
                     <div className="flex relative ml-auto bg-white/[.07] rounded-[10px] mt-4">
@@ -296,11 +291,9 @@ export default function AllTasks({ category }: any) {
                         }
                       />
                       <div
-                        className={`absolute left-1/2 bottom-0 translate-y-1/2 transform -translate-x-1/2 py-${
-                          isMobile ? 1 : 2
-                        } px-${isMobile ? 2 : 8} text-${
-                          isMobile ? "xs" : "2xl"
-                        } bg-[#313824] rounded-[30px]`}
+                        className={`absolute left-1/2 bottom-0 translate-y-1/2 transform -translate-x-1/2 py-${isMobile ? 1 : 2
+                          } px-${isMobile ? 2 : 8} text-${isMobile ? "xs" : "2xl"
+                          } bg-[#313824] rounded-[30px]`}
                       >
                         <p className="text-[#BCFE1E]">{selectedTask?.points}</p>
                       </div>
@@ -311,9 +304,8 @@ export default function AllTasks({ category }: any) {
             </ModalBody>
             <ModalFooter>
               <div
-                className={`flex bg-[#322356] p-4 rounded-[10px] w-full h-fit pb-4 ${
-                  isMobile ? "flex-col" : "flex-row"
-                }`}
+                className={`flex bg-[#322356] p-4 rounded-[10px] w-full h-fit pb-4 ${isMobile ? "flex-col" : "flex-row"
+                  }`}
                 style={{ gap: isMobile ? 15 : 5 }}
               >
                 <div
@@ -345,9 +337,8 @@ export default function AllTasks({ category }: any) {
       </Modal>
 
       <div
-        className={`grid grid-cols-${isMobile ? 1 : 2} sm:grid-cols-2 gap-[${
-          isMobile ? 18 : 18
-        }px] text-white w-full mb-8`}
+        className={`grid grid-cols-${isMobile ? 1 : 2} sm:grid-cols-2 gap-[${isMobile ? 18 : 18
+          }px] text-white w-full mb-8`}
       >
         {!tasks && <LoadingTasks />}
         {taskList.length === 0 ? (
@@ -358,9 +349,9 @@ export default function AllTasks({ category }: any) {
               isComplete={
                 Boolean(
                   user &&
-                    user.completedQuests?.find(
-                      (q: any) => q.description === item.description
-                    )
+                  user.completedQuests?.find(
+                    (q: any) => q.description === item.description
+                  )
                 ) ||
                 (user?.hasMint && item.name === "Mint NFT")
               }

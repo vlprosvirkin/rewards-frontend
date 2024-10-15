@@ -98,8 +98,8 @@ export function WalletProvider({ children }: any) {
             [wallet.info.rdns]: accounts[0],
           }));
 
-          window.localStorage.setItem("selectedWalletRdns", wallet.info.rdns);
-          window.localStorage.setItem(
+          window?.localStorage?.setItem("selectedWalletRdns", wallet.info.rdns);
+          window?.localStorage?.setItem(
             "selectedAccountByWalletRdns",
             JSON.stringify({
               ...selectedAccountByWalletRdns,
@@ -127,7 +127,7 @@ export function WalletProvider({ children }: any) {
 
       const wallet = wallets[selectedWalletRdns];
       setSelectedWalletRdns(null);
-      window.localStorage.removeItem("selectedWalletRdns");
+      window?.localStorage?.removeItem("selectedWalletRdns");
 
       try {
         await wallet.provider.request({
