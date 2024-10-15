@@ -61,7 +61,7 @@ export function LinkedAccounts({ setActiveTab }: any) {
           console.log('tgData after', data)
           toast.loading("Linking telegram account...");
 
-          connectTgAccountToUser(data.user.id)
+          connectTgAccountToUser(data.user.id || data?.id)
 
           //   {
           //     "user": {
