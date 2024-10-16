@@ -6,6 +6,7 @@ import Header from "@/components/header";
 import { Providers } from "@/app/providers";
 import "./app.css";
 import SessionWrapper from "./SessionWrapper";
+import { Root } from "@/components/Root";
 
 
 const gotham = localFont({
@@ -44,11 +45,11 @@ export default function RootLayout({
         <body
           className={`${gotham.className} ${anon.variable} flex flex-col min-h-screen w-screen`}
         >
-          <Providers>
-            <Header />
-
-            <style>
-              {`
+          <Root>
+            <Providers>
+              <Header />
+              <style>
+                {`
 							body {
 								background: fixed
 	                                                                linear-gradient(
@@ -58,9 +59,10 @@ export default function RootLayout({
 								);
 							}
 						`}
-            </style>
-            {children}
-          </Providers>
+              </style>
+              {children}
+            </Providers>
+          </Root>
         </body>
       </html>
     </SessionWrapper>

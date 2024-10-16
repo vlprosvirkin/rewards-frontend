@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import pfp from "@/public/hoplite-lvl3.png";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getCode, setRef } from "../InviteSection/getCode";
 import { useSDK } from "@metamask/sdk-react";
@@ -46,6 +47,7 @@ const CopyNotification = ({ copied }: { copied: boolean }) => {
 };
 
 export function ProfileGeneral({ setActiveTab }: any) {
+  const router = useRouter();
   const [username, setUsername] = useState<string>("...");
   const [referralCode, setReferralCode] = useState<string>("...");
   const [referrees, setReferrees] = useState<number | string>("...");
@@ -81,6 +83,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
       toast.dismiss();
       toast.success(data?.message);
       setReferralLink('')
+      router.refresh()
     }
   };
   const changeUsername = async () => {
@@ -488,14 +491,14 @@ export function ProfileGeneral({ setActiveTab }: any) {
             </div>
 
             <div className="flex flex-col bg-[#141020] py-4 px-3 rounded-[10px] border-1 border-[#424242] text-white/[.5] text-sm">
-              <span>Referral link**</span>
+              <span>Referral code**</span>
 
               <span className="flex">
                 <input
                   type="text"
                   value={referralLink}
                   className="my-auto px-2 bg-transparent w-2/3 focus:outline-none"
-                  placeholder="friend-link"
+                  placeholder="friend-code"
                   onChange={(e) => setReferralLink(e.target.value)}
                 />
                 <button
