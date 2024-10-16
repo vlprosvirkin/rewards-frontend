@@ -15,9 +15,12 @@ export const DesktopHeader: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      if (!account) return;
+      if (!account) {
+        setPoints(null)
+        return
+      }
       const data = await getCode(account);
-      setPoints(Number(data?.totalPoints) ?? 0);
+      setPoints(data?.totalPoints ? Number(data?.totalPoints) : 0);
     })()
   }, [account]);
 

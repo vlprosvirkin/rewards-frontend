@@ -87,9 +87,8 @@ export default function Leaderboard() {
       <br />
       <br />
       <div
-        className={`relative flex flex-col mx-${
-          isMobile ? 5 : 48
-        } bg-[#171225] p-6 rounded-2xl`}
+        className={`relative flex flex-col mx-${isMobile ? 5 : 48
+          } bg-[#171225] p-6 rounded-2xl`}
       >
         {data?.length > 10 && (
           <button className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 font-bold text-sm text-center py-[14px] px-[42px] bg-[#191728] rounded-lg text-white">

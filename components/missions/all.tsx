@@ -198,13 +198,7 @@ export default function AllTasks({ category }: any) {
         const recipientAddress = accounts[0];
         console.log("recipientAddress", recipientAddress);
         setTaskStatus("Verifying...  ");
-        // const res = await fetch("/api/mint", {
-        // 	method: "POST",
-        // 	headers: {
-        // 		"Content-Type": "application/json",
-        // 	},
-        // 	body: JSON.stringify({ recipientAddress }),
-        // });
+
         let errText = "";
         toast.loading("Minting NFT...");
         const data = await mint(recipientAddress).catch((err) => {
@@ -221,6 +215,14 @@ export default function AllTasks({ category }: any) {
         toast.dismiss();
 
         if (data.hash) {
+          try {
+            await checkTask(1, recipientAddress, 'nft_mint')
+          } catch (e) {
+            !errText && setIsError(true);
+            toast.error("Error minting NFT. Please try again.");
+            console.log(e)
+            return
+          }
           setTaskStatus("Success!");
           setTimeout(onClose, 2000);
           toast.success(`Minting successful! Transaction hash: ${data.hash}`);

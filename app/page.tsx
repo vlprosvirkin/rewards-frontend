@@ -34,11 +34,9 @@ export default function Home() {
       <br />
       <br />
       <main
-        className={`text-white grid grid-cols-${
-          isMobile ? 1 : 2
-        } z-50 justify-center gap-[10px] ${
-          isMobile ? "mx-5" : "mx-10"
-        } my-auto`}
+        className={`text-white grid grid-cols-${isMobile ? 1 : 2
+          } z-50 justify-center gap-[10px] ${isMobile ? "mx-5" : "mx-10"
+          } my-auto`}
       >
         <div className={`grid grid-rows-1  grid-cols-1`}>
           <div className="w-full h-full pb-12">
@@ -57,7 +55,7 @@ export default function Home() {
           <div className="w-full h-full">
             <div
               onClick={() => router.push("/missions")}
-              className="relative flex rounded-[23px] overflow-hidden cursor-pointer bg-[#10101A]/[.53] border border-white/[.1] pl-[33px] pt-[35px] pb-[28px] pr-[52px] h-full w-full backdrop-blur-sm"
+              className="relative flex rounded-[23px] overflow-hidden cursor-pointer bg-[#10101A]/[.83] border border-white/[.1] pl-[33px] pt-[35px] pb-[28px] pr-[52px] h-full w-full backdrop-blur-sm"
             >
               <Image
                 src={missions}

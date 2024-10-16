@@ -60,8 +60,8 @@ export function ProfileGeneral({ setActiveTab }: any) {
   const setRefferal = async () => {
     toast.loading("Applying referral link...");
     if (!account) return toast.error("Please connect your wallet first");
+
     const data = await setRef(referralLink, account).catch((e) => {
-      console.log(e);
       toast.dismiss();
       toast.error("Error applying referral link");
       return { data: undefined };
@@ -83,22 +83,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
       })
       .catch((e) => console.log(e));
   };
-  const [user, setUser] = useState<any>(localStorage?.getItem("user"));
-  useEffect(() => {
-    console.log("user", user);
-    (async () => {
-      if (account && !user) {
-        const user = await getCode(account);
-        if (user) {
-          window?.localStorage?.setItem("user", JSON.stringify(user));
-          setUser(user);
-          console.log("user", user);
-        }
-      }
-    })();
-  }, [account, user]);
-
-  const [data, setData] = useState<any>();
+  const [data, setData] = useState<any>(localStorage?.getItem("user"));
   const [streak, setStreak] = useState(0);
   const [streakProgress, setStreakProgress] = useState<number>(5);
 
@@ -118,44 +103,43 @@ export function ProfileGeneral({ setActiveTab }: any) {
   }, []);
 
   useEffect(() => {
-    console.log(account);
     const doAsync = async () => {
       if (!account) return;
-      const user = await getCode(account);
+      const userData = await getCode(`${account}`);
 
-      setData(user);
-      setUsername(user?.username || "...");
-      setNewUserName(user?.username || "...");
-      setReferralCode(formatCode(user?.referral || "..."));
-      setReferrees(user?.regPoints);
-      setStreak(data?.strikeCount);
-      console.log(user);
-      window?.localStorage?.setItem("user", JSON.stringify(user));
-      if (user?.charLvl) {
+      setData(userData);
+      setUsername(userData?.username || "...");
+      setNewUserName(userData?.username || "...");
+      setReferralCode(formatCode(userData?.referral || "..."));
+      setReferrees(userData?.regPoints);
+      setStreak(userData?.strikeCount);
+
+      window?.localStorage?.setItem("user", JSON.stringify(userData));
+
+      if (userData?.charLvl) {
         const userChar = charactersData.find((c) =>
-          c.levels.includes(user.charLvl)
+          c.levels.includes(userData.charLvl)
         );
-        console.log(userChar, user.charLvl, imgIndex);
+
         if (!userChar) return;
+
         setUserChar(userChar);
         setImgIndex(
-          userChar?.levels[0] === user.charLvl
+          userChar?.levels[0] === userData.charLvl
             ? 0
-            : userChar?.levels[1] === user.charLvl
+            : userChar?.levels[1] === userData.charLvl
               ? 1
               : 2
         );
       }
     };
 
-    account && doAsync();
-  }, [account, updateCount]);
+    doAsync();
+  }, [account]);
 
   useEffect(() => {
     // setStreakProgress(`${getPos(streak)}%`);
     const result = getPos(streak);
-    console.log("getpos:", result);
-    console.log("streak:", streak);
     setStreakProgress(result !== 0 ? Number(result) : 3);
   }, [streak]);
 
@@ -168,8 +152,6 @@ export function ProfileGeneral({ setActiveTab }: any) {
 
   const [userChar, setUserChar] = useState<any>(null);
   const [imgIndex, setImgIndex] = useState<any>(0);
-
-  useEffect(() => { }, [user]);
 
   const { isMobile } = useWindowSize();
 
@@ -431,13 +413,13 @@ export function ProfileGeneral({ setActiveTab }: any) {
             </div>
 
             <div className="text-white text-3xl mb-6 mt-3">
-              <span className="text-anon">{`${account?.substring(
+              <span className="text-anon">{account ? `${account?.substring(
                 0,
                 6
               )}...${account?.substring(
                 username.length - 6,
                 username.length
-              )}`}</span>
+              )}` : '...'}</span>
             </div>
 
             <div
@@ -468,7 +450,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
               // onClick={() => setIsOpen(true)}
               className="flex flex-col bg-[#141020] py-4 px-3 rounded-[10px] border-1 border-[#424242] text-white/[.5] text-sm"
             >
-              <span>Username</span>
+              <span>Wallet address</span>
               <br />
               <span>{shortenAddress(account ?? "")}</span>
             </div>

@@ -113,6 +113,7 @@ export default function ConnectWalletButton() {
   }, []);
 
   const languages = sdk?.availableLanguages ?? ["en"];
+
   const updateWallet = async (wallet: string) => {
     if (!wallet) {
       return;
@@ -127,6 +128,7 @@ export default function ConnectWalletButton() {
     onClose();
     router.refresh();
   };
+
   useEffect(() => {
     if (acc) {
       onClose();
@@ -287,25 +289,71 @@ export default function ConnectWalletButton() {
     };
   }, [sdk]);
 
-  const connect = () => {
+  const connect = async () => {
+    if (!window) {
+      return
+    }
     if (!window.ethereum) {
-      throw new Error(`invalid ethereum provider`);
+      throw new Error(`Invalid Ethereum provider`);
     }
 
-    window.ethereum
-      .request({
+    try {
+      // Запрашиваем список аккаунтов
+      const accounts = (await window.ethereum.request({
         method: "eth_requestAccounts",
         params: [],
-      })
-      .then((accounts) => {
-        if (accounts) {
-          console.debug(`connect:: accounts result`, accounts);
-          setAccount((accounts as string[])[0]);
-          setConnected(true);
-          updateWallet(`${(accounts as string[])[0]}`);
+      })) as string[] | undefined; // Обработка возможного undefined
+
+      if (accounts && accounts.length > 0) {
+        console.debug(`connect:: accounts result`, accounts);
+        setAccount(accounts[0]);
+        setConnected(true);
+        updateWallet(accounts[0]);
+
+        // Проверяем текущую сеть
+        const currentChainId = await window.ethereum.request({
+          method: "eth_chainId",
+        });
+
+        // Если сеть не Polygon, сначала добавляем её, а затем переключаемся
+        const polygonChainId = "0x89"; // Chain ID для Polygon Mainnet
+        if (currentChainId !== polygonChainId) {
+          try {
+            // Пытаемся сразу добавить сеть Polygon
+            await window.ethereum.request({
+              method: "wallet_addEthereumChain",
+              params: [
+                {
+                  chainId: polygonChainId,
+                  chainName: "Polygon Mainnet",
+                  rpcUrls: ["https://polygon-rpc.com/"],
+                  nativeCurrency: {
+                    name: "MATIC",
+                    symbol: "MATIC", // 18 десятичных знаков
+                    decimals: 18,
+                  },
+                  blockExplorerUrls: ["https://polygonscan.com/"],
+                },
+              ],
+            });
+
+            // После добавления сети переключаемся на неё
+            await window.ethereum.request({
+              method: "wallet_switchEthereumChain",
+              params: [{ chainId: polygonChainId }],
+            });
+
+            console.debug("Successfully added and switched to Polygon network");
+          } catch (error) {
+            console.error("Failed to add or switch to Polygon network", error);
+          }
         }
-      })
-      .catch((e) => console.log("request accounts ERR", e));
+      } else {
+        console.error("No accounts found or user rejected the request.");
+      }
+    } catch (e) {
+      console.log("Request accounts ERR", e);
+    }
   };
 
   const connectAndSign = async () => {
@@ -449,9 +497,11 @@ export default function ConnectWalletButton() {
       .then(() => {
         setIsDisconecting(true);
         setAccount("");
+        setConnected(false)
         setTimeout(() => {
           setIsDisconecting("ok");
         }, 1000);
+        router.refresh()
       })
       .catch((e) => {
         setIsDisconecting(false);
@@ -549,7 +599,7 @@ export default function ConnectWalletButton() {
         <ModalOverlay />
         <ModalContent
           style={{
-            maxWidth: isMobile ? "700px" : "",
+            maxWidth: isMobile ? "90%" : "700px",
             backgroundColor: "rgb(19 16 36 / 84%)",
           }}
         >

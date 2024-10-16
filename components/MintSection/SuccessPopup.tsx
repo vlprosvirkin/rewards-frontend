@@ -18,6 +18,7 @@ import { getCode, mint } from "../InviteSection/getCode";
 import { useSDK } from "@metamask/sdk-react";
 import { toast } from "react-toastify";
 import { useWindowSize } from "@/hooks/useWindowSize";
+import { checkTask } from "../missions/checkTask";
 
 export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
   const [isMinting, setIsMinting] = useState(false);
@@ -91,6 +92,15 @@ export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
         setIsMinting(false);
 
         if (data?.hash) {
+          try {
+            await checkTask(1, recipientAddress, 'nft_mint')
+          } catch (e) {
+            !errText && setIsError(true);
+            toast.error("Error minting NFT. Please try again.");
+            console.log(e)
+            return
+          }
+
           setTxHash(data.txHash);
           setSuccess(true);
           toast.success(`Minting successful! Transaction hash: ${data.hash}`);
@@ -152,7 +162,9 @@ export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent style={{
+        maxWidth: "700px",
+      }}>
         <ModalBody className="text-center backdrop-blur-md rounded-[18px] border border-white/[.09]">
           <Image
             src={x}
@@ -212,6 +224,10 @@ const Congratulations: React.FC<GratzProps> = ({
     onOpen();
   }, []);
 
+  const openPolygoscan = async () => {
+    await window?.open("https://polygonscan.com/tx/" + hash, "_blank")
+  }
+
   const closeModal = () => {
     setSuccess(false);
     onClose();
@@ -231,7 +247,7 @@ const Congratulations: React.FC<GratzProps> = ({
                 <div className="text-[13px] text-white/[.58] mb-6">
                   Your unique access NFT is minted
                 </div>
-                <button className="text-[14px] font-bold bg-[#BCFE1E] py-[14px] px-[42px] rounded-lg border border-white/[.29]">
+                <button className="text-[14px] font-bold bg-[#BCFE1E] py-[14px] px-[42px] rounded-lg border border-white/[.29]" onClick={openPolygoscan}>
                   Transaction
                 </button>
               </>

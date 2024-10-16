@@ -37,7 +37,7 @@ export const charactersData = [
     images: [hippeis_lvl3, hippeis_lvl3, hippeis_lvl3],
     description: "Hippeis were the elite cavalry of ancient Greece.",
     gridImage: hippeis_lvl3,
-    cost: 8000,
+    cost: 400,
   },
   {
     name: "Polemarchos",
@@ -97,6 +97,15 @@ export default function Characters() {
       }
     })()
   }, [account]);
+
+  useEffect(() => {
+    if (!charLvl) {
+      return
+    }
+    const { characterIndex, levelIndex } = getCharacterAndLevel(charLvl);
+    setSelectedCharacterIndex(characterIndex);
+    setSelectedLevelIndex(levelIndex);
+  }, [charLvl])
 
   const selectedLevel =
     charactersData[selectedCharacterIndex].levels[selectedLevelIndex];
@@ -289,7 +298,7 @@ export default function Characters() {
                 Upgrade
               </button>
 
-              {pointsNeeded > 0 && (
+              {(pointsNeeded > 0 && selectedLevel > charLvl) && (
                 <span className="gap-2 flex">
                   <Image src={a} alt="" />
                   <span className="text-[13px] text-white">

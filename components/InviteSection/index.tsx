@@ -33,7 +33,7 @@ export const InviteSection: React.FC = () => {
 
   return (
     <div
-      className="rounded-[23px] bg-[#10101A]/[.53] border border-white/[.1] pl-[33px] pt-[35px] pb-[28px] pr-[33px]"
+      className="rounded-[23px] bg-[#10101A]/[.83] border border-white/[.1] pl-[33px] pt-[35px] pb-[28px] pr-[33px]"
       style={{
         padding: isMobile ? "30px 20px 30px 20px" : "30px 30px 30px 30px",
       }}

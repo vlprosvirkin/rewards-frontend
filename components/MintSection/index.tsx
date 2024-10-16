@@ -61,7 +61,7 @@ export const MintSection: React.FC = () => {
   return (
     <div className="flex flex-col gap-[10px] w-full">
       <div
-        className={`rounded-[23px] bg-[#10101A]/[.53] border border-white/[.1] pl-[33px] pt-[35px] pb-[28px] pr-[33px] h-full backdrop-blur-sm`}
+        className={`rounded-[23px] bg-[#10101A]/[.83] border border-white/[.1] pl-[33px] pt-[35px] pb-[28px] pr-[33px] h-full backdrop-blur-xl`}
         style={{
           padding: isMobile ? "30px 20px 30px 20px" : "30px 30px 30px 30px",
         }}
@@ -82,9 +82,8 @@ export const MintSection: React.FC = () => {
                 Mint the exclusive early-access “Time-Warrior NFT”
               </p>
               <p
-                className={`text-[${
-                  isMobile ? 12 : 14
-                }px] text-white/[.58] mb-8`}
+                className={`text-[${isMobile ? 12 : 14
+                  }px] text-white/[.58] mb-8`}
               >
                 This NFT equips your digital persona with armor and weapons that
                 blend ancient Greek design with futuristic, cyberpunk

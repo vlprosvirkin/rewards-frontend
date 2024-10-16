@@ -62,7 +62,6 @@ export default function MissionsHub() {
   useEffect(() => {
     const doAsync = async () => {
       const data = await getCode(`${account}`);
-      // console.log("fetched streak:", data.strikeCount);
       if (data) {
         setStreak(data.strikeCount);
       }
