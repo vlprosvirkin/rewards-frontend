@@ -196,7 +196,6 @@ export default function AllTasks({ category }: any) {
           method: "eth_accounts",
         });
         const recipientAddress = accounts[0];
-        console.log("recipientAddress", recipientAddress);
         setTaskStatus("Verifying...  ");
 
         let errText = "";
@@ -219,8 +218,9 @@ export default function AllTasks({ category }: any) {
             await checkTask(1, recipientAddress, 'nft_mint')
           } catch (e) {
             !errText && setIsError(true);
-            toast.error("Error minting NFT. Please try again.");
+            toast.error("Error accept task. Please try again.");
             console.log(e)
+            onClose()
             return
           }
           setTaskStatus("Success!");
@@ -354,8 +354,7 @@ export default function AllTasks({ category }: any) {
                   user.completedQuests?.find(
                     (q: any) => q.description === item.description
                   )
-                ) ||
-                (user?.hasMint && item.name === "Mint NFT")
+                )
               }
               key={`task_${index}`}
               item={item}
