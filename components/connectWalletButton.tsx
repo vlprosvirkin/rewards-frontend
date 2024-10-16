@@ -188,15 +188,19 @@ export default function ConnectWalletButton() {
   }, []);
 
   useEffect(() => {
-    if (!sdk || !activeProvider) {
+    if (!sdk || !sdk?.isInitialized()) {
       return;
+    }
+
+    if (!window || !window.ethereum) {
+      return
     }
 
     // activeProvider is mapped to window.ethereum.
     console.debug(`App::useEffect setup active provider listeners`);
-    if (window.ethereum?.getSelectedAddress()) {
+    if (window.ethereum?.selectedAddress) {
       console.debug(`App::useEffect setting account from window.ethereum `);
-      setAccount(window.ethereum?.getSelectedAddress() ?? "");
+      setAccount(window.ethereum?.selectedAddress ?? "");
       setConnected(true);
     } else {
       setConnected(false);
@@ -209,7 +213,7 @@ export default function ConnectWalletButton() {
     };
 
     const onInitialized = () => {
-      console.debug(`App::useEffect on _initialized`);
+      console.log(`App::useEffect on _initialized`);
       setConnected(true);
       if (window.ethereum?.getSelectedAddress()) {
         setAccount(window.ethereum?.getSelectedAddress() ?? "");
@@ -244,31 +248,33 @@ export default function ConnectWalletButton() {
       setServiceStatus(_serviceStatus);
     };
 
-    window.ethereum?.on("chainChanged", onChainChanged);
 
-    window.ethereum?.on("_initialized", onInitialized);
+    window.ethereum.on("chainChanged", onChainChanged);
 
-    window.ethereum?.on("accountsChanged", onAccountsChanged);
+    window.ethereum.on("_initialized", onInitialized);
 
-    window.ethereum?.on("connect", onConnect);
+    window.ethereum.on("accountsChanged", onAccountsChanged);
 
-    window.ethereum?.on("disconnect", onDisconnect);
+    window.ethereum.on("connect", onConnect);
+
+    window.ethereum.on("disconnect", onDisconnect);
 
     sdk.on(EventType.SERVICE_STATUS, onServiceStatus);
 
+
     return () => {
       console.debug(`App::useEffect cleanup activeprovider events`);
-      window.ethereum?.removeListener("chainChanged", onChainChanged);
-      window.ethereum?.removeListener("_initialized", onInitialized);
-      window.ethereum?.removeListener("accountsChanged", onAccountsChanged);
-      window.ethereum?.removeListener("connect", onConnect);
-      window.ethereum?.removeListener("disconnect", onDisconnect);
+      window?.ethereum?.removeListener("chainChanged", onChainChanged);
+      window?.ethereum?.removeListener("_initialized", onInitialized);
+      window?.ethereum?.removeListener("accountsChanged", onAccountsChanged);
+      window?.ethereum?.removeListener("connect", onConnect);
+      window?.ethereum?.removeListener("disconnect", onDisconnect);
       sdk.removeListener(EventType.SERVICE_STATUS, onServiceStatus);
     };
-  }, [activeProvider]);
+  }, [sdk]);
 
   useEffect(() => {
-    if (!sdk?.isInitialized()) {
+    if (!sdk || !sdk?.isInitialized()) {
       return;
     }
 

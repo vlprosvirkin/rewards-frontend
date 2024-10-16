@@ -51,7 +51,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
   const [referrees, setReferrees] = useState<number | string>("...");
   const [copied, setCopied] = useState<boolean>(false);
 
-  const [referralLink, setReferralLink] = useState<any>();
+  const [referralLink, setReferralLink] = useState<any>('');
   const { account } = useSDK();
   const [isOpen, setIsOpen] = useState(false);
   const [newUserName, setNewUserName] = useState("");
@@ -63,6 +63,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
 
     const data = await setRef(referralLink, account).catch((e) => {
       toast.dismiss();
+      console.log(e)
       toast.error("Error applying referral link");
       return { data: undefined };
     });
