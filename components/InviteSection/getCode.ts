@@ -59,10 +59,10 @@ export const mint = async (recipientAddress: string) => {
 };
 
 export const setRef = async (referralLink: string, account: string) => {
-  const { data } = await axios
-    .post(`https://api-rewards.aspis.finance/v1/users/referral/${account}`, {
-      referral: referralLink,
-      user: account,
+  const data = await axios
+    .post(`https://api-rewards.aspis.finance/v1/users/referral`, {
+      refCode: referralLink,
+      referralAddress: account,
       withCredentials: true,
       headers: {
         accept: "application/json",
@@ -73,7 +73,6 @@ export const setRef = async (referralLink: string, account: string) => {
       console.log(res.data);
       return res.data;
     });
-  console.log(data);
   return data;
 };
 

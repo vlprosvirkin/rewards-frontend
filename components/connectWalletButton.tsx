@@ -118,8 +118,8 @@ export default function ConnectWalletButton() {
     if (!wallet) {
       return;
     }
-    // ##########################################################################
-    const res = await registerUser({ address: wallet, referral: referral });
+
+    const res = await registerUser({ address: wallet, referral: referral ? referral.replace(/-/g, '').toLowerCase() : '' });
 
     console.log("result of updating wallet: ", res);
     if (res?.errors && res?.errors[0]?.message === "User already registered") {

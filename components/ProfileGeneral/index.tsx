@@ -59,11 +59,20 @@ export function ProfileGeneral({ setActiveTab }: any) {
 
   const setRefferal = async () => {
     toast.loading("Applying referral link...");
-    if (!account) return toast.error("Please connect your wallet first");
+    if (!account) {
+      toast.dismiss()
+      toast.error("Please connect your wallet first");
+      return
+    }
+    if (!referralLink) {
+      toast.dismiss()
+      toast.error("Please fill referall input first");
+      return
+    }
 
-    const data = await setRef(referralLink, account).catch((e) => {
+    const data = await setRef(referralLink.replace(/-/g, '').toLowerCase(), account).catch((e) => {
       toast.dismiss();
-      console.log(e)
+      console.log('error', e)
       toast.error("Error applying referral link");
       return { data: undefined };
     });
@@ -71,6 +80,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
     if (data.message) {
       toast.dismiss();
       toast.success(data?.message);
+      setReferralLink('')
     }
   };
   const changeUsername = async () => {
@@ -107,7 +117,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
     const doAsync = async () => {
       if (!account) return;
       const userData = await getCode(`${account}`);
-
+      console.log(userData)
       setData(userData);
       setUsername(userData?.username || "...");
       setNewUserName(userData?.username || "...");
