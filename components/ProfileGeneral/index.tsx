@@ -508,7 +508,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
             </div>
 
             <span className="text-[11px] text-white/[.58] mt-2 mb-4">
-              *If you come from a friend and you have a link code. You can
+              *If you come from a friend and you have a referral code. You can
               specify it and get{" "}
               <span className="border-b font-bold text-[#BCFE1E] border-[#BCFE1E]">
                 100 points{" "}
