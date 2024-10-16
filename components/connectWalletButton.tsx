@@ -629,7 +629,7 @@ export default function ConnectWalletButton() {
                   If you come from a friend and you have alink or code. You can
                   specify it and get{" "}
                   <span className="font-extrabold text-[#BCFE1E] opacity-80">
-                    123 points{" "}
+                    100 points{" "}
                   </span>
                   of rewards at once.
                 </p>
