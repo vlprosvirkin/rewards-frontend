@@ -8,7 +8,6 @@ import { useClientOnce } from '@/hooks/useClientOnce';
 import { useDidMount } from '@/hooks/useDidMount';
 import { ErrorBoundary } from '../Telegram/ErrorBoundary';
 import { ErrorPage } from '../Telegram/ErrorPage';
-import { postEvent } from '@telegram-apps/sdk-react';
 
 
 function RootInner({ children }: PropsWithChildren) {
@@ -36,11 +35,6 @@ export function Root(props: PropsWithChildren) {
     const { children } = props
     return <>{children}</>
   }
-
-  postEvent('web_app_expand');
-  postEvent('web_app_setup_main_button', { is_visible: false })
-  postEvent('web_app_setup_swipe_behavior', { allow_vertical_swipe: false })
-  postEvent('web_app_ready');
 
 
   return didMount ? (

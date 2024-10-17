@@ -6,6 +6,7 @@ import {
   initData,
   $debug,
   init as initSDK,
+  postEvent,
 } from '@telegram-apps/sdk-react';
 
 /**
@@ -18,6 +19,11 @@ export function init(debug: boolean): void {
   // Initialize special event handlers for Telegram Desktop, Android, iOS, etc.
   // Also, configure the package.
   initSDK();
+
+  postEvent('web_app_expand');
+  postEvent('web_app_setup_main_button', { is_visible: false })
+  postEvent('web_app_setup_swipe_behavior', { allow_vertical_swipe: false })
+  postEvent('web_app_ready');
 
   // Mount all components used in the project.
   backButton.isSupported() && backButton.mount();
