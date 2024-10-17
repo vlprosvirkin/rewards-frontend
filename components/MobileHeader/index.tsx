@@ -9,9 +9,9 @@ import ProfileImg from "@/public/images/profile-icon.png";
 import CoinLogo from "@/public/coin-logo.png";
 import { useEffect, useState } from "react";
 import { useSDK } from "@metamask/sdk-react";
-import { getCode } from "../InviteSection/getCode";
 import ConnectWalletButton from "../connectWalletButton";
 import { usePathname } from "next/navigation";
+import { useUser } from "@/context/UserContext";
 
 const links = [
   {
@@ -43,25 +43,16 @@ const boxStyle = {
   alignItems: "center",
 };
 
-export const MobileHeader = ({
-  user,
-  account,
-}: {
-  user: any;
-  account: string | undefined;
-}) => {
-  const [points, setPoints] = useState<any>();
+export const MobileHeader = () => {
   const currentPath = usePathname();
   const pageName = currentPath?.split("/")[1];
+  const { user } = useUser();
+  const { account } = useSDK()
 
   const [isVisible, setIsVisible] = useState(true); // Управляем видимостью
   const [lastScrollY, setLastScrollY] = useState(0); // Храним последнее положение прокрутки
 
-  useEffect(() => {
-    if (user) {
-      setPoints(user.points);
-    }
-  }, [user]);
+
   const handleScroll = () => {
     const currentScrollY = window.scrollY;
 
@@ -220,7 +211,7 @@ export const MobileHeader = ({
                       src={CoinLogo}
                       alt="CoinLogo"
                     />
-                    <text>{points ?? 0}</text>
+                    <text>{user?.totalPoints ?? 0}</text>
                   </span>
                 </>
               )}

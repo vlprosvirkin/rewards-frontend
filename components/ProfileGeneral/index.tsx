@@ -4,7 +4,7 @@ import Image from "next/image";
 import pfp from "@/public/hoplite-lvl3.png";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getCode, setRef } from "../InviteSection/getCode";
+import { setRef } from "../InviteSection/getCode";
 import { useSDK } from "@metamask/sdk-react";
 import { CoolButton } from "../CoolButton";
 
@@ -28,6 +28,7 @@ import {
 import { shortenAddress } from "@/utils/shortenAddress";
 import { charactersData } from "@/app/characters/page";
 import { toast } from "react-toastify";
+import { useUser } from "@/context/UserContext";
 
 const formatCode = (input: string): string => {
   const upperCased = input.toUpperCase();
@@ -48,6 +49,7 @@ const CopyNotification = ({ copied }: { copied: boolean }) => {
 
 export function ProfileGeneral({ setActiveTab }: any) {
   const router = useRouter();
+  const { user, setUser } = useUser()
   const [username, setUsername] = useState<string>("...");
   const [referralCode, setReferralCode] = useState<string>("...");
   const [referrees, setReferrees] = useState<number | string>("...");
@@ -82,6 +84,10 @@ export function ProfileGeneral({ setActiveTab }: any) {
     if (data.message) {
       toast.dismiss();
       toast.success(data?.message);
+      if (user) {
+        setUser({ ...user, totalPoints: user?.totalPoints + 100 })
+      }
+
       setReferralLink('')
       router.refresh()
     }
@@ -97,7 +103,6 @@ export function ProfileGeneral({ setActiveTab }: any) {
       })
       .catch((e) => console.log(e));
   };
-  const [data, setData] = useState<any>(localStorage?.getItem("user"));
   const [streak, setStreak] = useState(0);
   const [streakProgress, setStreakProgress] = useState<number>(5);
 
@@ -117,39 +122,35 @@ export function ProfileGeneral({ setActiveTab }: any) {
   }, []);
 
   useEffect(() => {
-    const doAsync = async () => {
-      if (!account) return;
-      const userData = await getCode(`${account}`);
-      console.log(userData)
-      setData(userData);
-      setUsername(userData?.username || "...");
-      setNewUserName(userData?.username || "...");
-      setReferralCode(formatCode(userData?.referral || "..."));
-      setReferrees(userData?.regPoints);
-      setStreak(userData?.strikeCount);
 
-      window?.localStorage?.setItem("user", JSON.stringify(userData));
+    setUsername(user?.username || "...");
+    setNewUserName(user?.username || "...");
+    setReferralCode(formatCode(user?.referral || "..."));
+    setReferrees(user?.regPoints || 0);
+    setStreak(user?.strikeCount || 0);
 
-      if (userData?.charLvl) {
-        const userChar = charactersData.find((c) =>
-          c.levels.includes(userData.charLvl)
-        );
+    if (user?.charLvl) {
+      const userChar = charactersData.find((c) =>
+        c.levels.includes(user.charLvl)
+      );
 
-        if (!userChar) return;
+      if (!userChar) return;
 
-        setUserChar(userChar);
-        setImgIndex(
-          userChar?.levels[0] === userData.charLvl
-            ? 0
-            : userChar?.levels[1] === userData.charLvl
-              ? 1
-              : 2
-        );
-      }
-    };
+      setUserChar(userChar);
+      setImgIndex(
+        userChar?.levels[0] === user.charLvl
+          ? 0
+          : userChar?.levels[1] === user.charLvl
+            ? 1
+            : 2
+      );
+    } else {
+      setUserChar(0)
+      setImgIndex(0)
+    }
 
-    doAsync();
-  }, [account]);
+  }, [user])
+
 
   useEffect(() => {
     // setStreakProgress(`${getPos(streak)}%`);
@@ -269,7 +270,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
             <div className="bg-[#141020] rounded-[10px] h-full py-4 px-3 flex flex-col justify-between">
               <span className="text-white/[.5] text-sm">Character</span>
               <div className="self-start text-[white]">
-                lvl_{data && data?.charLvl}
+                lvl_{user && user?.charLvl}
               </div>
             </div>
 
@@ -278,7 +279,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
               <div className="self-start flex">
                 <Image src={a} alt="" className="mr-2" />
                 <span className="my-auto text-[white]">
-                  {data?.totalPoints ?? 0}
+                  {user?.totalPoints ?? 0}
                 </span>
               </div>
             </div>
@@ -287,13 +288,13 @@ export function ProfileGeneral({ setActiveTab }: any) {
               <span className="text-white/[.5] text-sm">
                 Place in leaderboard
               </span>
-              <div className="self-start text-[white]">{data?.place ?? 0}</div>
+              <div className="self-start text-[white]">{user?.place ?? 0}</div>
             </div>
 
             <div className="bg-[#141020] rounded-[10px] h-full py-4 px-3 flex flex-col justify-between">
               <span className="text-white/[.5] text-sm">Current streak</span>
               <div className="self-start text-[white]">
-                {data && data?.strikeCount}-day
+                {user && user?.strikeCount}-day
               </div>
             </div>
           </div>
@@ -523,7 +524,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
               <div className="bg-[#141020] rounded-[10px] h-full py-4 px-3 flex flex-col justify-between">
                 <span className="text-white/[.5] text-sm">Character</span>
                 <div className="self-start text-[white]">
-                  lvl_{data && data?.charLvl}
+                  lvl_{user && user?.charLvl}
                 </div>
               </div>
 
@@ -532,7 +533,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
                 <div className="self-start flex">
                   <Image src={a} alt="" className="mr-2" />
                   <span className="my-auto text-[white]">
-                    {data && data?.totalPoints}
+                    {user && user?.totalPoints}
                   </span>
                 </div>
               </div>
@@ -542,14 +543,14 @@ export function ProfileGeneral({ setActiveTab }: any) {
                   Place in leaderboard
                 </span>
                 <div className="self-start text-[white]">
-                  {data && data?.place}
+                  {user && user?.place}
                 </div>
               </div>
 
               <div className="bg-[#141020] rounded-[10px] h-full py-4 px-3 flex flex-col justify-between">
                 <span className="text-white/[.5] text-sm">Current streak</span>
                 <div className="self-start text-[white]">
-                  {data && data?.strikeCount}-day
+                  {user && user?.strikeCount}-day
                 </div>
               </div>
             </div>

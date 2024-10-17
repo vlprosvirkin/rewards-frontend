@@ -17,15 +17,17 @@ import { useEffect, useState } from "react";
 import toleft from "@/public/characters/toleft.svg";
 import toright from "@/public/characters/toright.svg";
 import { CoolButton } from "@/components";
-import { getCode, upgradeChar } from "@/components/InviteSection/getCode";
+import { upgradeChar } from "@/components/InviteSection/getCode";
 import { useSDK } from "@metamask/sdk-react";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { toast } from "react-toastify";
+import { useUser } from "@/context/UserContext";
 
 const costs = [0, 100, 200, 400, 800, 1200, 2000, 3000, 4000, 8000];
 
 export default function Characters() {
   let selectedCharLvl = 0;
+  const { user } = useUser()
   const { account } = useSDK();
 
   const [charLvl, setCharLvl] = useState(0);
@@ -54,18 +56,14 @@ export default function Characters() {
   };
 
   useEffect(() => {
-    const doAsync = async () => {
-      const data = await getCode(`${account}`);
-      setCharLvl(data.charLvl);
-      setTotalPoints(data.totalPoints);
-      // setTotalPoints(213);
-      console.log("CharLvl", charLvl);
-
-      console.log("res", costs[Number(charLvl) + 1] - totalPoints);
-    };
-
-    doAsync();
-  }, []);
+    if (user) {
+      setCharLvl(user.charLvl);
+      setTotalPoints(user.totalPoints);
+    } else {
+      setCharLvl(0);
+      setTotalPoints(0);
+    }
+  }, [user])
 
   useEffect(() => {
     const res = costs[Number(charLvl) + 1] - totalPoints;
@@ -111,9 +109,8 @@ export default function Characters() {
           <div className="flex flex-col -mx-12">
             <div className="flex mb-6">
               <button
-                className={`mr-auto bg-white/[.05] py-4 pl-5 pr-6 rounded-full border-white ${
-                  selectedCharLvl <= 0 && "opacity-50"
-                }`}
+                className={`mr-auto bg-white/[.05] py-4 pl-5 pr-6 rounded-full border-white ${selectedCharLvl <= 0 && "opacity-50"
+                  }`}
               >
                 <Image src={toleft} alt="" />
               </button>
@@ -121,9 +118,8 @@ export default function Characters() {
                 {character}
               </span>
               <button
-                className={`ml-auto bg-white/[.05] py-4 pl-6 pr-5 rounded-full border-white ${
-                  selectedCharLvl >= 3 && "opacity-50"
-                }`}
+                className={`ml-auto bg-white/[.05] py-4 pl-6 pr-5 rounded-full border-white ${selectedCharLvl >= 3 && "opacity-50"
+                  }`}
               >
                 <Image src={toright} alt="" />
               </button>
@@ -131,25 +127,22 @@ export default function Characters() {
 
             <div className="flex justify-around mx-12 mb-7">
               <button
-                className={`font-bold tracking-[0.3rem] text-[13px] ${
-                  charLvl !== 0 ? "text-white/[.5]" : "text-[#BCFE1E]"
-                }`}
+                className={`font-bold tracking-[0.3rem] text-[13px] ${charLvl !== 0 ? "text-white/[.5]" : "text-[#BCFE1E]"
+                  }`}
                 onClick={() => setCharLvl(0)}
               >
                 LEVEL 0
               </button>
               <button
-                className={`font-bold tracking-[0.3rem] text-[13px] ${
-                  charLvl !== 1 ? "text-white/[.5]" : "text-[#BCFE1E]"
-                }`}
+                className={`font-bold tracking-[0.3rem] text-[13px] ${charLvl !== 1 ? "text-white/[.5]" : "text-[#BCFE1E]"
+                  }`}
                 onClick={() => setCharLvl(1)}
               >
                 LEVEL 1
               </button>
               <button
-                className={`font-bold tracking-[0.3rem] text-[13px] ${
-                  charLvl !== 2 ? "text-white/[.5]" : "text-[#BCFE1E]"
-                }`}
+                className={`font-bold tracking-[0.3rem] text-[13px] ${charLvl !== 2 ? "text-white/[.5]" : "text-[#BCFE1E]"
+                  }`}
                 onClick={() => setCharLvl(2)}
               >
                 LEVEL 2
@@ -166,23 +159,22 @@ export default function Characters() {
             <div className="flex mx-auto items-center">
               <button
                 disabled={!account}
-                className={`py-[14px] px-[42px] font-bold text-white ${
-                  !canMint && "opacity-50"
-                } bg-white/[.05] rounded-xl w-fit mr-3 `}
+                className={`py-[14px] px-[42px] font-bold text-white ${!canMint && "opacity-50"
+                  } bg-white/[.05] rounded-xl w-fit mr-3 `}
                 onClick={
                   account
                     ? () =>
-                        upgradeChar(account)
-                          .then((res) => {
-                            console.log("res", res);
-                            if (res) {
-                              toast.success("Character upgraded");
-                            }
-                          })
-                          .catch((err) => {
-                            console.log("err", err);
-                            toast.error("Error upgrading character");
-                          })
+                      upgradeChar(account)
+                        .then((res) => {
+                          console.log("res", res);
+                          if (res) {
+                            toast.success("Character upgraded");
+                          }
+                        })
+                        .catch((err) => {
+                          console.log("err", err);
+                          toast.error("Error upgrading character");
+                        })
                     : () => toast.info("Connect your wallet")
                 }
               >

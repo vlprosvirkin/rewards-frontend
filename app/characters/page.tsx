@@ -13,11 +13,12 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import toleft from "@/public/characters/toleft.svg";
 import toright from "@/public/characters/toright.svg";
-import { getCode, upgradeChar } from "@/components/InviteSection/getCode";
+import { upgradeChar } from "@/components/InviteSection/getCode";
 import { useSDK } from "@metamask/sdk-react";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import PulseLogoLoader from "@/components/PulseLogo";
 import { toast } from "react-toastify";
+import { useUser } from "@/context/UserContext";
 
 const costs = [0, 100, 200, 400, 800, 1200, 2000, 3000, 4000, 8000];
 
@@ -58,7 +59,7 @@ export const charactersData = [
 ];
 export default function Characters() {
   const { account } = useSDK();
-
+  const { user } = useUser()
   const [charLvl, setCharLvl] = useState(0);
   const [totalPoints, setTotalPoints] = useState(0);
   const [pointsNeeded, setPointsNeeded] = useState<any>(0);
@@ -82,21 +83,16 @@ export default function Characters() {
   };
 
   useEffect(() => {
-    (async () => {
-      if (!account) return;
-      const user = await getCode(account)
-
-      if (user) {
-        setCharLvl(user?.charLvl);
-        setTotalPoints(user.totalPoints);
-
-        const { characterIndex, levelIndex } = getCharacterAndLevel(user.charLvl);
-        setSelectedCharacterIndex(characterIndex);
-        setSelectedLevelIndex(levelIndex);
-        setTotalPoints(user.totalPoints);
-      }
-    })()
-  }, [account]);
+    if (user?.id) {
+      setTotalPoints(user.totalPoints)
+      setCharLvl(user.charLvl)
+    } else {
+      setCharLvl(0)
+      setTotalPoints(0)
+      setSelectedCharacterIndex(0)
+      setSelectedLevelIndex(0)
+    }
+  }, [user]);
 
   useEffect(() => {
     if (!charLvl) {

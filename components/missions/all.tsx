@@ -15,10 +15,11 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import { getCode, mint } from "../InviteSection/getCode";
+import { mint } from "../InviteSection/getCode";
 import { Spinner } from "../MintSection/Loader";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
+import { useUser } from "@/context/UserContext";
 
 interface TaskItemProps {
   item: any;
@@ -81,33 +82,7 @@ export default function AllTasks({ category }: any) {
   const { account } = useSDK();
   const [taskStatus, setTaskStatus] = useState<string | undefined>();
   const { isMobile } = useWindowSize();
-  const [user, setUser] = useState<any>(undefined);
-
-  useEffect(() => {
-    const userFromStorage = localStorage?.getItem("user");
-    if (
-      userFromStorage !== undefined &&
-      userFromStorage !== null &&
-      userFromStorage !== "undefined" &&
-      userFromStorage !== "null"
-    ) {
-      setUser(JSON.parse(userFromStorage));
-    }
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      console.log(account)
-      if (account) {
-        const user = await getCode(account);
-        if (user) {
-          localStorage?.setItem("user", JSON.stringify(user));
-          setUser(user);
-          console.log("user", user);
-        }
-      }
-    })();
-  }, [account]);
+  const { user, setUser } = useUser();
 
   useEffect(() => {
     const doAsync = async () => {
@@ -132,6 +107,10 @@ export default function AllTasks({ category }: any) {
 
   const completeTask = async () => {
     if (!account || !selectedTask) return alert("Please connect your wallet");
+    if (!user) {
+      alert("Please reload page");
+      return
+    }
     try {
       setTaskStatus("Verifying...  ");
       const res = await checkTask(
@@ -147,8 +126,8 @@ export default function AllTasks({ category }: any) {
           toast.success("Task completed successfully");
           const userData = user;
           userData.completedQuests.push(selectedTask);
-          localStorage?.setItem("user", JSON.stringify(userData));
-          setUser(userData);
+          userData.totalPoints = user.totalPoints + selectedTask.points
+          setUser({ ...user, totalPoints: userData.totalPoints, completedQuests: userData.completedQuests })
         } else {
           setTaskStatus("Quest already completed");
         }
@@ -224,6 +203,9 @@ export default function AllTasks({ category }: any) {
             return
           }
           setTaskStatus("Success!");
+          if (user) {
+            setUser({ ...user, totalPoints: user?.totalPoints + 100 })
+          }
           setTimeout(onClose, 2000);
           toast.success(`Minting successful! Transaction hash: ${data.hash}`);
         } else {
@@ -325,6 +307,7 @@ export default function AllTasks({ category }: any) {
                 </div>
                 <div className="flex text-center w-full my-auto ml-auto h-fit">
                   <button
+                    disabled={taskStatus === 'Success!'}
                     onClick={isMint ? mintNFTAdmin : completeTask}
                     className="bg-white/[.05] py-[14px] ml-auto px-[42px] rounded-lg text-sm font-bold text-white w-fit h-fit m-auto"
                   >

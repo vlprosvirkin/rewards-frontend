@@ -114,21 +114,6 @@ export default function ConnectWalletButton() {
 
   const languages = sdk?.availableLanguages ?? ["en"];
 
-  const updateWallet = async (wallet: string) => {
-    if (!wallet) {
-      return;
-    }
-
-    const res = await registerUser({ address: wallet, referral: referral ? referral.replace(/-/g, '').toLowerCase() : '' });
-
-    console.log("result of updating wallet: ", res);
-    if (res?.errors && res?.errors[0]?.message === "User already registered") {
-      localStorage?.setItem("isRegistred", "true");
-    }
-    onClose();
-    router.refresh();
-  };
-
   useEffect(() => {
     if (acc) {
       onClose();
@@ -314,7 +299,6 @@ export default function ConnectWalletButton() {
         console.debug(`connect:: accounts result`, accounts);
         setAccount(accounts[0]);
         setConnected(true);
-        updateWallet(accounts[0]);
 
         // Проверяем текущую сеть
         const currentChainId = await window.ethereum.request({
@@ -354,6 +338,8 @@ export default function ConnectWalletButton() {
             console.error("Failed to add or switch to Polygon network", error);
           }
         }
+        onClose();
+        router.refresh();
       } else {
         console.error("No accounts found or user rejected the request.");
       }

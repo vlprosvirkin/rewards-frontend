@@ -14,11 +14,11 @@ import { useEffect, useState } from "react";
 import { Spinner } from "./Loader";
 import kartinka from "@/public/modal/left.png";
 import kartinka2 from "@/public/modal/right.png";
-import { getCode, mint } from "../InviteSection/getCode";
-import { useSDK } from "@metamask/sdk-react";
+import { mint } from "../InviteSection/getCode";
 import { toast } from "react-toastify";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { checkTask } from "../missions/checkTask";
+import { useUser } from "@/context/UserContext";
 
 export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
   const [isMinting, setIsMinting] = useState(false);
@@ -27,8 +27,7 @@ export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
   const [txHash, setTxHash] = useState("");
   const [done, setDone] = useState(false);
   const [text, setText] = useState("");
-  const [hasMint, setHasMint] = useState(false);
-  const { account } = useSDK();
+  const { user, setUser } = useUser();
 
   const resetStates = () => {
     setIsMinting(false);
@@ -37,25 +36,24 @@ export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
     setTxHash("");
     setDone(false);
   };
-  const [user, setUser] = useState({});
-  useEffect(() => {
-    const user = localStorage?.getItem("user");
-    if (user) {
-      const user_ = JSON.parse(user);
-      setUser(user_);
-      setHasMint(user_?.hasMint ? true : false);
-    }
-  }, []);
 
-  useEffect(() => {
-    (async () => {
-      if (!user && account) {
-        const res = await getCode(account);
-        setUser(res);
-        setHasMint(res?.hasMint ? true : false);
-      }
-    })();
-  }, [account]);
+  const checkMintTask = async (address: string, txHash?: string) => {
+    try {
+      await checkTask(1, address, 'nft_mint')
+    } catch (e) {
+      toast.error("Error minting NFT. Please try again.");
+      console.log(e)
+      return
+    }
+    if (txHash) {
+      setTxHash(txHash);
+      toast.success(`Minting successful! Transaction hash: ${txHash}`);
+    }
+    if (user) {
+      setUser({ ...user, totalPoints: user?.totalPoints + 100 })
+    }
+    setSuccess(true);
+  }
 
   const mintNFTAdmin = async () => {
     if (typeof window !== "undefined" && window.ethereum) {
@@ -65,19 +63,18 @@ export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
           method: "eth_accounts",
         });
         const recipientAddress = accounts[0];
-        console.log("recipientAddress", recipientAddress);
+
         setIsMinting(true);
-        // const res = await fetch("/api/mint", {
-        // 	method: "POST",
-        // 	headers: {
-        // 		"Content-Type": "application/json",
-        // 	},
-        // 	body: JSON.stringify({ recipientAddress }),
-        // });
+
         let errText = "";
         toast.loading("Minting NFT...");
+
+        if (user && user.hasMint) {
+          await checkMintTask(recipientAddress)
+          return
+        }
+
         const data = await mint(recipientAddress).catch((err) => {
-          console.log(err);
           if (err?.response?.data.errors) {
             // alert(err?.response?.data.errors[0]);
             setText(err?.response?.data.errors[0]);
@@ -87,27 +84,19 @@ export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
           }
           return { data: undefined };
         });
-        toast.dismiss();
+
         toast.dismiss();
         setIsMinting(false);
 
         if (data?.hash) {
-          try {
-            await checkTask(1, recipientAddress, 'nft_mint')
-          } catch (e) {
-            !errText && setIsError(true);
-            toast.error("Error minting NFT. Please try again.");
-            console.log(e)
-            return
-          }
-
-          setTxHash(data.txHash);
-          setSuccess(true);
-          toast.success(`Minting successful! Transaction hash: ${data.hash}`);
+          setTimeout(async () => {
+            await checkMintTask(recipientAddress, data?.hash)
+          }, 3000)
         } else {
           !errText && setIsError(true);
           toast.error("Error minting NFT. Please try again.");
         }
+
       } catch (error) {
         console.error("Error minting NFT:", error);
         setIsError(true);
@@ -173,7 +162,7 @@ export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
             onClick={onClose}
           />
 
-          {hasMint ? (
+          {user?.hasMint ? (
             <div className="flex flex-col py-4">
               <p className="text-white text-[24px]"></p>
               <p className="text-white/[.58] text-[13px] mb-6">

@@ -1,5 +1,6 @@
 "use server";
 
+import { IUser } from "@/types/user";
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
@@ -8,10 +9,11 @@ interface props {
   address: string;
 }
 
-export const getCode = async (address: string) => {
+export const getCode = async (address: string): Promise<IUser | null> => {
   if (!address || address === undefined || address === 'undefined') {
     return null;
   }
+
   try {
     const { data } = await axios.get(
       `https://api-rewards.aspis.finance/v1/users/${address}`,
@@ -22,11 +24,12 @@ export const getCode = async (address: string) => {
         },
       }
     );
+    console.log('data', data)
     return data;
   } catch(e) {
     console.log(e)
+    return null;
   }
-  
 };
 
 export const upgradeChar = async (account: string) => {

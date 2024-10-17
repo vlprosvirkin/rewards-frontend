@@ -4,6 +4,7 @@ import { useWindowSize } from "@/hooks/useWindowSize";
 import PulseLogoLoader from "@/components/PulseLogo";
 import { useSDK } from "@metamask/sdk-react";
 import { getLeaderboard } from "@/components/InviteSection/getCode";
+import { useUser } from "@/context/UserContext";
 
 interface Item {
   place: number;
@@ -60,17 +61,13 @@ interface Leaderboard {
 export default function Leaderboard() {
   const [data, setData] = useState<any>(null);
   const { isMobile, windowSize } = useWindowSize();
-  const [user, setUser] = useState<Item>();
+  const { user } = useUser()
   const { account } = useSDK();
 
   useEffect(() => {
     const doAsync = async () => {
-      console.log("RRR");
       const res = await getLeaderboard();
       setData(res?.filter((item: Item) => item.address !== account));
-      const user = res?.find((item: Item) => item.address === account);
-      user && setUser(user);
-      console.log("user", user);
     };
 
     doAsync();
@@ -129,8 +126,8 @@ export default function Leaderboard() {
                   you
                 </span>
               </p>
-              <p className="w-1/5 text-center">{user.bonusRate + "x"}</p>
-              <p className="w-1/5 text-center">{user.level || 0}</p>
+              <p className="w-1/5 text-center">{user?.bonusRate + "x"}</p>
+              <p className="w-1/5 text-center">{user?.charLvl || 0}</p>
               <p className="w-1/5 text-end pr-2">{user.totalPoints}</p>
             </div>
           )}

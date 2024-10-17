@@ -7,6 +7,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { theme } from "../utils/modalTheme";
 import { CacheProvider } from "@chakra-ui/next-js";
 import "react-toastify/dist/ReactToastify.css";
+import { UserProvider } from "@/context/UserContext";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -42,7 +43,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
                 infuraAPIKey: "8dfa517f5f87445bbee9c3d303e26f8a",
               }}
             >
-              {children}
+              <UserProvider>
+                {children}
+              </UserProvider>
             </MetaMaskProvider>
           </WalletProvider>
         </ChakraProvider>

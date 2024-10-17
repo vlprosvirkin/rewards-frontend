@@ -15,11 +15,10 @@ import mstreak from "@/public/monthStreak.svg";
 import sphere from "@/public/scrollSphere.svg";
 import Image from "next/image";
 
-import { getCode } from "@/components/InviteSection/getCode";
-import { useSDK } from "@metamask/sdk-react";
 import { LoadingTasks } from "@/components/missions/loading";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import PulseLogoLoader from "@/components/PulseLogo";
+import { useUser } from "@/context/UserContext";
 
 export const getPos = (value: number) => {
   const marks = [
@@ -56,19 +55,16 @@ export default function MissionsHub() {
   const [streakProgress, setStreakProgress] = useState<string>("3%");
   const [loading, setLoading] = useState(true);
   const { isMobile, windowSize } = useWindowSize();
+  const { user } = useUser()
 
-  const { account } = useSDK();
 
   useEffect(() => {
-    const doAsync = async () => {
-      const data = await getCode(`${account}`);
-      if (data) {
-        setStreak(data.strikeCount);
-      }
-    };
-
-    doAsync();
-  }, [account]);
+    if (user) {
+      setStreak(user.strikeCount);
+    } else {
+      setStreak(0)
+    }
+  }, [user])
 
   useEffect(() => {
     // setStreakProgress(`${getPos(streak)}%`);
@@ -87,9 +83,8 @@ export default function MissionsHub() {
     return null;
   }
 
-  const tabStyle = `py-${isMobile ? 1 : 3}  text-[${
-    isMobile ? 11 : 16
-  }px] rounded-[27px] px-${isMobile ? 2 : 4}`;
+  const tabStyle = `py-${isMobile ? 1 : 3}  text-[${isMobile ? 11 : 16
+    }px] rounded-[27px] px-${isMobile ? 2 : 4}`;
 
   const isTabActive = (tab: string) => {
     return activeTab == tab
@@ -118,9 +113,8 @@ export default function MissionsHub() {
         }}
       >
         <div
-          className={`flex text-[#595959] gap-[${
-            isMobile ? 10 : 20
-          }px] mb-8 mx-11`}
+          className={`flex text-[#595959] gap-[${isMobile ? 10 : 20
+            }px] mb-8 mx-11`}
         >
           <button
             className={tabStyle + isTabActive("all")}
@@ -220,11 +214,11 @@ export default function MissionsHub() {
             style={
               isMobile
                 ? {
-                    display: "flex",
-                    maxWidth: 60,
-                    justifyContent: "center",
-                    textAlign: "center",
-                  }
+                  display: "flex",
+                  maxWidth: 60,
+                  justifyContent: "center",
+                  textAlign: "center",
+                }
                 : {}
             }
           >

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import A from "@/public/A_chars.svg";
 import a from "@/public/characters/a.svg";
 import hoplite_lvl0 from "@/public/characters/hoplite-lvl0.png";
@@ -12,9 +13,7 @@ import bgs from "@/public/sphere.png";
 import toleft from "@/public/characters/toleft.svg";
 import toright from "@/public/characters/toright.svg";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { useSDK } from "@metamask/sdk-react";
-import { getCode } from "@/components/InviteSection/getCode";
+import { useUser } from "@/context/UserContext";
 
 const costs = [0, 100, 200, 400, 800, 1200, 2000, 3000, 4000, 8000];
 
@@ -84,7 +83,7 @@ const levels = [
 ];
 
 export default function Characters() {
-  const { account } = useSDK();
+  const { user } = useUser()
   const [charLvl, setCharLvl] = useState(0); // Уровень персонажа с сервера
   const [selectedCharLvl, setSelectedCharLvl] = useState(0); // Отображаемый уровень персонажа
   const [pointsNeeded, setPointsNeeded] = useState<any>(0);
@@ -92,15 +91,16 @@ export default function Characters() {
   const [exists, setExists] = useState(true);
 
   useEffect(() => {
-    const doAsync = async () => {
-      if (!account) return;
-      const data = await getCode(account);
-      setCharLvl(data.charLvl);
-      setSelectedCharLvl(data.charLvl);
-      setTotalPoints(data.totalPoints);
-    };
-    doAsync();
-  }, [account]);
+    if (user) {
+      setCharLvl(user.charLvl);
+      setSelectedCharLvl(user.charLvl);
+      setTotalPoints(user.totalPoints);
+    } else {
+      setCharLvl(0);
+      setSelectedCharLvl(0);
+      setTotalPoints(0);
+    }
+  }, [user])
 
   useEffect(() => {
     setExists(selectedCharLvl === charLvl);
@@ -168,9 +168,8 @@ export default function Characters() {
               <button
                 onClick={() => rotateCharacterLvl(-1)}
                 disabled={selectedCharLvl <= 0}
-                className={`mr-auto bg-white/[.05] py-4 pl-5 pr-6 rounded-full border-white ${
-                  selectedCharLvl <= 0 && "opacity-50"
-                }`}
+                className={`mr-auto bg-white/[.05] py-4 pl-5 pr-6 rounded-full border-white ${selectedCharLvl <= 0 && "opacity-50"
+                  }`}
               >
                 <Image src={toleft} alt="" />
               </button>
@@ -180,9 +179,8 @@ export default function Characters() {
               <button
                 onClick={() => rotateCharacterLvl(1)}
                 disabled={selectedCharLvl >= levels.length - 1}
-                className={`ml-auto bg-white/[.05] py-4 pl-6 pr-5 rounded-full border-white ${
-                  selectedCharLvl >= levels.length - 1 && "opacity-50"
-                }`}
+                className={`ml-auto bg-white/[.05] py-4 pl-6 pr-5 rounded-full border-white ${selectedCharLvl >= levels.length - 1 && "opacity-50"
+                  }`}
               >
                 <Image src={toright} alt="" />
               </button>
@@ -197,9 +195,8 @@ export default function Characters() {
             {!isMaxLevel && (
               <div className="flex mx-auto items-center">
                 <button
-                  className={`py-[14px] px-[42px] font-bold text-white ${
-                    !canUpgrade && "opacity-50"
-                  } bg-white/[.05] rounded-xl w-fit mr-3 `}
+                  className={`py-[14px] px-[42px] font-bold text-white ${!canUpgrade && "opacity-50"
+                    } bg-white/[.05] rounded-xl w-fit mr-3 `}
                   onClick={lvlUp}
                   disabled={!canUpgrade}
                 >
@@ -231,9 +228,8 @@ export default function Characters() {
             {levels.slice(1).map((level) => (
               <div
                 key={level.level}
-                className={`relative ${
-                  charLvl >= level.level ? "opacity-100" : "opacity-50"
-                }`}
+                className={`relative ${charLvl >= level.level ? "opacity-100" : "opacity-50"
+                  }`}
               >
                 <Image src={A} alt="" />
                 <Image

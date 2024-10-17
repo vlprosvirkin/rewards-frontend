@@ -4,59 +4,17 @@ import Image from "next/image";
 import hoplite_lvl3 from "@/public/hoplite-lvl3.png";
 
 import { CoolButton } from "../CoolButton";
-import { useRouter } from "next/navigation";
 
-import { ethers } from "ethers"; // Import ethers library
-import { JsonRpcProvider, Wallet, Contract, BrowserProvider } from "ethers";
-import { getKey, getRpcUrl } from "./getKey";
-import { useState } from "react";
 import { SuccessPopup } from "./SuccessPopup";
 import { useDisclosure } from "@chakra-ui/react";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import { toast } from "react-toastify";
-import axios from "axios";
-import { mint } from "../InviteSection/getCode";
 
-// import dotenv from "dotenv";
-// dotenv.config();
+
 
 export const MintSection: React.FC = () => {
-  const router = useRouter();
-  const [isMinting, setIsMinting] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isMobile } = useWindowSize();
 
-  const mintNFTAdmin = async () => {
-    if (typeof window !== "undefined" && window.ethereum) {
-      try {
-        // Подключаемся к MetaMask
-        await window.ethereum.request({ method: "eth_requestAccounts" });
-        const accounts: any = await window.ethereum.request({
-          method: "eth_accounts",
-        });
-        const recipientAddress = accounts[0];
-
-        // Отправляем запрос на сервер для выполнения минтинга
-        setIsMinting(true);
-        toast.loading("Minting NFT...");
-        const data = await mint(recipientAddress);
-        setIsMinting(false);
-        toast.dismiss();
-        if (data?.hash) {
-          toast.success(`Minting successful! Transaction hash: ${data.hash}`);
-          toast.dismiss();
-        } else {
-          toast.error("Error minting NFT. Please try again.");
-        }
-      } catch (error) {
-        console.error("Error minting NFT:", error);
-        toast.error("Error minting NFT. " + error);
-        setIsMinting(false);
-      }
-    } else {
-      toast.info("MetaMask is not installed");
-    }
-  };
 
   return (
     <div className="flex flex-col gap-[10px] w-full">
@@ -98,7 +56,6 @@ export const MintSection: React.FC = () => {
               />
             )}
           </div>
-          {/* onClick={() => mintNFTAdmin()} */}
           <CoolButton
             color={isMobile ? "green" : undefined}
             size="lg"

@@ -32,7 +32,7 @@ export function Root(props: PropsWithChildren) {
   // side.
   const didMount = useDidMount();
 
-  if (process.env.NEXT_PUBLIC_TG_NAME !== "TG") {
+  if (process.env.NEXT_PUBLIC_APP_NAME !== "TG") {
     const { children } = props
     return <>{children}</>
   }

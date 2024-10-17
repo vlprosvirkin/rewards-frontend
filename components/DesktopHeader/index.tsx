@@ -5,24 +5,11 @@ import { usePathname } from "next/navigation";
 import ConnectWalletButton from "@/components/connectWalletButton";
 import a from "@/public/characters/a.svg";
 import { useEffect, useState } from "react";
-import { useSDK } from "@metamask/sdk-react";
-import { getCode } from "../InviteSection/getCode";
+import { useUser } from "@/context/UserContext";
 
 export const DesktopHeader: React.FC = () => {
-  const { account } = useSDK();
   const currentPath = usePathname();
-  const [points, setPoints] = useState<any>();
-
-  useEffect(() => {
-    (async () => {
-      if (!account) {
-        setPoints(null)
-        return
-      }
-      const data = await getCode(account);
-      setPoints(data?.totalPoints ? Number(data?.totalPoints) : 0);
-    })()
-  }, [account]);
+  const { user } = useUser()
 
   return (
     <header className="flex relative py-5 px-7 items-center z-200">
@@ -82,7 +69,7 @@ export const DesktopHeader: React.FC = () => {
       {
         <div className="flex text-white">
           <Image src={a} alt="" className="my-auto" />
-          <span className="ml-1 my-auto mr-6">{points ?? "-"}</span>
+          <span className="ml-1 my-auto mr-6">{user?.totalPoints ?? "-"}</span>
         </div>
       }
       <ConnectWalletButton />

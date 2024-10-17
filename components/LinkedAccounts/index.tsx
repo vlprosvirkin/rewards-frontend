@@ -15,26 +15,24 @@ import { useWindowSize } from "@/hooks/useWindowSize";
 import XLogo from "@/public/images/X_logo.png";
 import TelegramLogo from "@/public/images/telegram-logo.png";
 import Image from "next/image";
-import { getCode } from "../InviteSection/getCode";
 import { toast } from "react-toastify";
 import { linkTgAccount } from "@/app/profile/link";
+import { useUser } from "@/context/UserContext";
 
 export function LinkedAccounts({ setActiveTab }: any) {
   const { isMobile } = useWindowSize();
+  const { user } = useUser()
   const [tgAccount, setTgAccount] = useState<boolean>(false);
   const [email, setEmail] = useState("");
   const { account } = useSDK();
 
   useEffect(() => {
-    const doAsync = async () => {
-      if (account) {
-        const data = await getCode(account);
-        setTgAccount(Boolean(data?.telegramId));
-      }
-    };
-
-    doAsync();
-  }, [account]);
+    if (user) {
+      setTgAccount(Boolean(user.telegramId));
+    } else {
+      setTgAccount(false)
+    }
+  }, [user]);
 
   useEffect(() => {
     tgAccount ? console.log(tgAccount) : null;

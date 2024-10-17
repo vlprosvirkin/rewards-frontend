@@ -8,27 +8,19 @@ import { useSDK } from "@metamask/sdk-react";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { getCode } from "./getCode";
+import { useUser } from "@/context/UserContext";
 
 export const InviteSection: React.FC = () => {
   const { account } = useSDK();
   const { isMobile } = useWindowSize();
   const router = useRouter();
+  const { user } = useUser()
+
   const showCode = async () => {
-    if (!account) return toast.info("You must connect your wallet first");
-    toast.loading("Fetching referral code...");
-    await getCode(account)
-      .then((res) => {
-        console.log(res);
-        toast.dismiss();
-        toast.success(`Your referral code is: ${res.referral}`);
-        router.replace("/profile");
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.dismiss();
-        toast.error("Error fetching referral code");
-      });
+    if (!account || !user) return toast.info("You must connect your wallet first");
+
+    toast.success(`Your referral code is: ${user.referral}`);
+    router.replace("/profile");
   };
 
   return (
