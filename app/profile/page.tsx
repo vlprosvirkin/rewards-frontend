@@ -79,7 +79,7 @@ export default function Profile() {
           <br />
         </>
       )}
-      <div className={`flex flex-col h-full`}>
+      <div className={`flex flex-col ${isMobile ? "" : "h-full"} ${isMobile ? "pb-[150px]" : ""}`}>
         {/*
 				<div className="flex border-b border-white/[.5] w-fit mx-auto gap-[18px] font-bold mb-8">
 					<button

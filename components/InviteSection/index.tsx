@@ -46,8 +46,10 @@ export const InviteSection: React.FC = () => {
           {isMobile && (
             <Image
               src={hand}
+              width={120} height={120}
               style={{ width: "120px", height: "120px" }}
               alt=""
+              quality={100}
             />
           )}
         </div>

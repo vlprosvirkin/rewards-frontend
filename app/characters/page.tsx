@@ -169,7 +169,7 @@ export default function Characters() {
   return (
     <>
       <main
-        className="flex w-full h-full justify-between items-center z-50"
+        className={`flex w-full ${isMobile ? "" : "h-full"} justify-between items-center z-50 ${isMobile ? "pb-[150px]" : ""}`}
         style={{
           flexDirection: isMobile ? "column" : "row",
           marginTop: isMobile ? 140 : 0,

@@ -36,7 +36,7 @@ export default function Home() {
       <main
         className={`text-white grid grid-cols-${isMobile ? 1 : 2
           } z-50 justify-center gap-[10px] ${isMobile ? "mx-5" : "mx-10"
-          } my-auto`}
+          } ${isMobile ? "pb-[150px]" : ""} my-auto`}
       >
         <div className={`grid grid-rows-1  grid-cols-1`}>
           <div className="w-full h-full pb-12">

@@ -116,12 +116,13 @@ export function LinkedAccounts({ setActiveTab }: any) {
           <span className="flex font-bold gap-16">
             <span className="text-lg my-auto">Not connected</span>
 
-            <form className="ml-auto" action={signInWithTwitter}>
+            <form className="ml-auto" >
               <button
+                disabled
                 type="submit"
                 className="bg-white/[.05] ease-in-out duration-200 hover:bg-white/[.2] text-white py-[14px] px-[42px] rounded-lg font-bold text-sm w-fit"
               >
-                Connect
+                Сoming soon
               </button>
             </form>
 

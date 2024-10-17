@@ -162,10 +162,24 @@ export default function AllTasks({ category }: any) {
     social_challenges: sorted?.["social_challenges"] || [],
     ambassadors: sorted?.["ambassadors"] || [],
   };
-  const [isMinting, setIsMinting] = useState(false);
-  const [text, setText] = useState();
-  const [txHash, setTxHash] = useState();
-  const [isError, setIsError] = useState(false);
+
+  const checkMintTask = async (address: string, txHash?: string) => {
+    try {
+      await checkTask(1, address, 'nft_mint')
+    } catch (e) {
+      toast.dismiss()
+      setTaskStatus("Something went wrong.");
+      toast.error("Error minting NFT. Please try again.");
+      console.log(e)
+      return
+    }
+
+    if (user) {
+      setUser({ ...user, totalPoints: user?.totalPoints + 100 })
+    }
+    toast.success(`Task checked successful!`)
+    setTaskStatus("Success!");
+  }
 
   const mintNFTAdmin = async () => {
     if (typeof window !== "undefined" && window.ethereum) {
@@ -178,44 +192,49 @@ export default function AllTasks({ category }: any) {
         setTaskStatus("Verifying...  ");
 
         let errText = "";
+
+        if (user && user.hasMint) {
+          toast.loading("Cheking task...");
+          await checkMintTask(recipientAddress);
+          return
+        }
+
         toast.loading("Minting NFT...");
+
         const data = await mint(recipientAddress).catch((err) => {
           console.log(err);
           if (err?.response?.data.errors) {
-            // alert(err?.response?.data.errors[0]);
-            setText(err?.response?.data.errors[0]);
+
             errText = err?.response?.data.errors[0];
             toast.error(err?.response?.data.errors[0]);
           }
           return { data: undefined };
         });
-        setIsMinting(false);
+
         toast.dismiss();
 
         if (data.hash) {
           try {
             await checkTask(1, recipientAddress, 'nft_mint')
           } catch (e) {
-            !errText && setIsError(true);
+            setTaskStatus("Something went wrong.");
             toast.error("Error accept task. Please try again.");
             console.log(e)
             onClose()
             return
           }
-          setTaskStatus("Success!");
+
           if (user) {
             setUser({ ...user, totalPoints: user?.totalPoints + 100 })
           }
           setTimeout(onClose, 2000);
           toast.success(`Minting successful! Transaction hash: ${data.hash}`);
         } else {
-          !errText && setIsError(true);
+          setTaskStatus("Something went wrong.");
         }
       } catch (error) {
         console.error("Error minting NFT:", error);
         setTaskStatus("Something went wrong.");
-        setIsError(true);
-        setIsMinting(false);
       }
     } else {
       toast.info("MetaMask is not installed");

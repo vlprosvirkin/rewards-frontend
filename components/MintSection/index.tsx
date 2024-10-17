@@ -31,6 +31,7 @@ export const MintSection: React.FC = () => {
             height={48}
             alt=""
             className="mb-6"
+            quality={100}
           />
         )}
         <div>
@@ -51,8 +52,11 @@ export const MintSection: React.FC = () => {
             {isMobile && (
               <Image
                 src={hoplite_lvl3}
+                width={120}
+                height={120}
                 style={{ width: "120px", height: "120px" }}
                 alt=""
+                quality={100}
               />
             )}
           </div>
