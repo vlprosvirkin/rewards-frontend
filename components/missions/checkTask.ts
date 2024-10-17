@@ -15,7 +15,7 @@ export const checkTask = async (
       // body: '{\n  "address": "0x02E06qef1123123azxcFasd0514211eCdd6D6f7A",\n  "props": {\n    "itemId": "1"\n  }\n}',
       address: address,
       props: {
-        itemId,
+        itemId: String(itemId),
       },
     }
   );

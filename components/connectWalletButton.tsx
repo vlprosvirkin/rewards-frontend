@@ -35,6 +35,7 @@ import {
 import { DisconnectButton } from "./DisconnectButton";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { Spinner } from "./MintSection/Loader";
+import { useUser } from "@/context/UserContext";
 
 interface input {
   "data-focus": string;
@@ -62,7 +63,6 @@ const btnStyle = {
 
 export default function ConnectWalletButton() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [referral, setReferral] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { windowSize, isMobile } = useWindowSize();
 
@@ -89,7 +89,7 @@ export default function ConnectWalletButton() {
   const [response, setResponse] = useState<any>("");
   const [connected, setConnected] = useState(false);
   const [isRegistred, setIsRegistred] = useState(false);
-
+  const { setReferral } = useUser()
   const [serviceStatus, setServiceStatus] = useState<ServiceStatus>();
   const [activeProvider, setActiveProvider] = useState<SDKProvider>();
   const [currentLanguage, setCurrentLanguage] = useState("en");

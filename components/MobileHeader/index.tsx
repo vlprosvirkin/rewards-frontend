@@ -124,7 +124,7 @@ export const MobileHeader = () => {
         )}
         <div className="py-[10px] px-[10px] flex w-full" style={{}}>
           <Link href="/" className="mr-auto flex">
-            <Image src={logo} alt="" className="my-auto" />
+            <Image src={logo} alt="" className="my-auto" quality={100} />
           </Link>
           <Link
             href="https://app.aspis.finance/"
@@ -170,7 +170,7 @@ export const MobileHeader = () => {
                 }
               >
                 {link.img && (
-                  <Image width={30} src={link.img} alt={link.title} />
+                  <Image width={30} src={link.img} alt={link.title} quality={100} />
                 )}
               </Link>
             ))}
@@ -199,6 +199,7 @@ export const MobileHeader = () => {
                     <Image
                       width={30}
                       style={{ minWidth: 30 }}
+                      quality={100}
                       src={ProfileImg}
                       alt="ProfileImg"
                     />{" "}
@@ -208,6 +209,7 @@ export const MobileHeader = () => {
                     <Image
                       style={{ minWidth: 9 }}
                       width={9}
+                      quality={100}
                       src={CoinLogo}
                       alt="CoinLogo"
                     />

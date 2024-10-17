@@ -41,12 +41,15 @@ export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
     try {
       await checkTask(1, address, 'nft_mint')
     } catch (e) {
+      toast.dismiss()
       toast.error("Error minting NFT. Please try again.");
+      setIsMinting(false);
       console.log(e)
       return
     }
     if (txHash) {
       setTxHash(txHash);
+      toast.dismiss()
       toast.success(`Minting successful! Transaction hash: ${txHash}`);
     }
     if (user) {
@@ -67,37 +70,43 @@ export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
         setIsMinting(true);
 
         let errText = "";
-        toast.loading("Minting NFT...");
 
         if (user && user.hasMint) {
+          toast.loading("Cheking task...");
           await checkMintTask(recipientAddress)
           return
         }
+
+        toast.loading("Minting NFT...");
 
         const data = await mint(recipientAddress).catch((err) => {
           if (err?.response?.data.errors) {
             // alert(err?.response?.data.errors[0]);
             setText(err?.response?.data.errors[0]);
             errText = err?.response?.data.errors[0];
+            toast.dismiss()
             toast.error(err?.response?.data.errors[0]);
             toast.error(err?.response?.data.errors[0]);
+            setIsMinting(false);
           }
           return { data: undefined };
         });
 
-        toast.dismiss();
-        setIsMinting(false);
-
         if (data?.hash) {
+          toast.loading("Check task...");
           setTimeout(async () => {
             await checkMintTask(recipientAddress, data?.hash)
-          }, 3000)
+            toast.dismiss()
+            setIsMinting(false);
+          }, 10000)
         } else {
           !errText && setIsError(true);
+          toast.dismiss()
           toast.error("Error minting NFT. Please try again.");
         }
 
       } catch (error) {
+        toast.dismiss()
         console.error("Error minting NFT:", error);
         setIsError(true);
         setIsMinting(false);
@@ -162,7 +171,9 @@ export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
             onClick={onClose}
           />
 
-          {user?.hasMint ? (
+          {(user?.hasMint && user.completedQuests?.find(
+            (q: any) => q.code === "nft_mint"
+          )) ? (
             <div className="flex flex-col py-4">
               <p className="text-white text-[24px]"></p>
               <p className="text-white/[.58] text-[13px] mb-6">
