@@ -397,15 +397,6 @@ export function ProfileGeneral({ setActiveTab }: any) {
               </span>
             </div>
           </div>
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
         </div>
       ) : (
         <div

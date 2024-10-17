@@ -101,7 +101,7 @@ export default function MissionsHub() {
 
   return (
     <main
-      className={"flex flex-col w-full" + (isMobile ? " mt-28" : "")}
+      className={"flex flex-col w-full" + (isMobile ? " mt-28" : "") + (isMobile ? " pb-[150px]" : "")}
       style={isMobile ? undefined : { padding: "0% 10%" }}
     >
       <div
