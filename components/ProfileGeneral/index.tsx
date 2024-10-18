@@ -126,7 +126,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
     setUsername(user?.username || "...");
     setNewUserName(user?.username || "...");
     setReferralCode(formatCode(user?.referral || "..."));
-    setReferrees(user?.regPoints || 0);
+    setReferrees(user?.refnum || 0);
     setStreak(user?.strikeCount || 0);
 
     if (user?.charLvl) {
