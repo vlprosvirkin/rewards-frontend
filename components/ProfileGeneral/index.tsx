@@ -442,7 +442,7 @@ export function ProfileGeneral({ setActiveTab }: any) {
                 </p>
               </div>
               <button className="flex items-center text-white font-bold text-sm ">
-                Connect Wallet
+                Connect Socials
                 <span className="ml-2">→</span>
               </button>
             </div>

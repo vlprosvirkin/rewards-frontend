@@ -72,7 +72,7 @@ export default function Profile() {
                 padding: "10px",
               }}
             >
-              Lincked Accounts
+              Linked Accounts
             </span>
           </div>
           <br />
