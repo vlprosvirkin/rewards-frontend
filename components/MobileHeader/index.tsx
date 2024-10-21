@@ -213,7 +213,7 @@ export const MobileHeader = () => {
                       src={CoinLogo}
                       alt="CoinLogo"
                     />
-                    <text>{user?.totalPoints ?? 0}</text>
+                    <span>{user?.totalPoints ?? 0}</span>
                   </span>
                 </>
               )}

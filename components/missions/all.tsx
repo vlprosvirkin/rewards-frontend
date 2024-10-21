@@ -100,61 +100,10 @@ export default function AllTasks({ category }: any) {
     console.log("Selected category:", category);
   }, [category]);
 
-  const showModal = (item: any) => {
-    setSelectedTask(item);
-    onOpen();
-  };
-
-  const completeTask = async () => {
-    if (!account || !selectedTask) return alert("Please connect your wallet");
-    if (!user) {
-      alert("Please reload page");
-      return
-    }
-    try {
-      setTaskStatus("Verifying...  ");
-      const res = await checkTask(
-        selectedTask?.id,
-        account,
-        selectedTask?.code
-      );
-      toast.dismiss();
-      console.log("Task completion response:", res);
-      if (res.message) {
-        if (res.message && res.message === "Quest completed") {
-          setTaskStatus("Success!");
-          toast.success("Task completed successfully");
-          const userData = user;
-          userData.completedQuests.push(selectedTask);
-          userData.totalPoints = user.totalPoints + selectedTask.points
-          setUser({ ...user, totalPoints: userData.totalPoints, completedQuests: userData.completedQuests })
-        } else {
-          setTaskStatus("Quest already completed");
-        }
-      } else if (res?.errors && res?.errors[0]) {
-        setTaskStatus(res?.errors[0]);
-        toast.error(res?.errors[0]);
-      } else {
-        setTaskStatus("Conditions not met");
-      }
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        if (error.status === 409) {
-          console.error('Axios Error:', error.message);
-          toast.error('Requirements of the quest have not been met');
-          setTaskStatus('')
-          return
-        }
-      }
-      console.log(error);
-      toast.error(String(error));
-      setTaskStatus("Something went wrong.");
-    }
-  };
-
   useEffect(() => {
     if (!isOpen) setTaskStatus(undefined);
   }, [isOpen]);
+
   const categoryMap: Record<string, any> = {
     all: tasks || [],
     getting_started: sorted?.["getting_started"] || [],
@@ -163,23 +112,65 @@ export default function AllTasks({ category }: any) {
     ambassadors: sorted?.["ambassadors"] || [],
   };
 
-  const checkMintTask = async (address: string, txHash?: string) => {
-    try {
-      await checkTask(1, address, 'nft_mint')
-    } catch (e) {
-      toast.dismiss()
-      setTaskStatus("Something went wrong.");
-      toast.error("Error minting NFT. Please try again.");
-      console.log(e)
+  const showModal = (item: any) => {
+    setSelectedTask(item);
+    onOpen();
+  };
+
+
+  const checkTaskFunc = async (taskId?: number, address?: string, taskCode?: string) => {
+    if (!account || !selectedTask) return alert("Please connect your wallet");
+    if (!user) {
+      alert("Please reload page");
       return
     }
+    try {
+      setTaskStatus("Verifying...  ");
+      const taskResponse = await checkTask(
+        taskId,
+        address,
+        taskCode
+      );
+      toast.dismiss();
+      console.log("Task completion response:", taskResponse);
 
-    if (user) {
-      setUser({ ...user, totalPoints: user?.totalPoints + 100 })
+      if (taskResponse.message && taskResponse.message === "Quest completed") {
+        setTaskStatus("Success!");
+        toast.success("Task completed successfully");
+        const userData = user;
+        userData.completedQuests.push(selectedTask);
+        userData.totalPoints = user.totalPoints + selectedTask.points
+        setUser({ ...user, totalPoints: userData.totalPoints, completedQuests: userData.completedQuests })
+        return
+      }
+
+      if (taskResponse.message && taskResponse.message !== "Quest completed") {
+        setTaskStatus("Quest already completed");
+        return
+      }
+
+      if (taskResponse?.errors && taskResponse?.errors[0]) {
+        setTaskStatus(taskResponse?.errors[0]);
+        toast.error(taskResponse?.errors[0]);
+        return
+      }
+
+      if (!taskResponse.message) {
+        setTaskStatus("Conditions not met");
+      }
+    } catch (error: unknown) {
+      if (error instanceof AxiosError && error.status === 409) {
+        console.error('Axios Error:', error.message);
+        toast.error('Requirements of the quest have not been met');
+        setTaskStatus('')
+        return
+      }
+      console.log(error);
+      toast.error(String(error));
+      setTaskStatus("Something went wrong.");
     }
-    toast.success(`Task checked successful!`)
-    setTaskStatus("Success!");
   }
+
 
   const mintNFTAdmin = async () => {
     if (typeof window !== "undefined" && window.ethereum) {
@@ -195,7 +186,7 @@ export default function AllTasks({ category }: any) {
 
         if (user && user.hasMint) {
           toast.loading("Cheking task...");
-          await checkMintTask(recipientAddress);
+          await checkTaskFunc(1, recipientAddress, 'nft_mint');
           return
         }
 
@@ -215,17 +206,11 @@ export default function AllTasks({ category }: any) {
 
         if (data.hash) {
           try {
-            await checkTask(1, recipientAddress, 'nft_mint')
+            toast.loading("Cheking task...");
+            await checkTaskFunc(1, recipientAddress, 'nft_mint');
           } catch (e) {
-            setTaskStatus("Something went wrong.");
-            toast.error("Error accept task. Please try again.");
-            console.log(e)
             onClose()
             return
-          }
-
-          if (user) {
-            setUser({ ...user, totalPoints: user?.totalPoints + 100 })
           }
           setTimeout(onClose, 2000);
           toast.success(`Minting successful! Transaction hash: ${data.hash}`);
@@ -295,7 +280,7 @@ export default function AllTasks({ category }: any) {
                       />
                       <div
                         className={`absolute left-1/2 bottom-0 translate-y-1/2 transform -translate-x-1/2 py-${isMobile ? 1 : 2
-                          } px-${isMobile ? 2 : 8} text-${isMobile ? "xs" : "2xl"
+                          } p-[10px] px-${isMobile ? 2 : 8} text-${isMobile ? "xs" : "2xl"
                           } bg-[#313824] rounded-[30px]`}
                       >
                         <p className="text-[#BCFE1E]">{selectedTask?.points}</p>
@@ -327,7 +312,13 @@ export default function AllTasks({ category }: any) {
                 <div className="flex text-center w-full my-auto ml-auto h-fit">
                   <button
                     disabled={taskStatus === 'Success!'}
-                    onClick={isMint ? mintNFTAdmin : completeTask}
+                    onClick={() => {
+                      if (isMint) {
+                        mintNFTAdmin()
+                        return
+                      }
+                      checkTaskFunc(selectedTask?.id, account, selectedTask?.code)
+                    }}
                     className="bg-white/[.05] py-[14px] ml-auto px-[42px] rounded-lg text-sm font-bold text-white w-fit h-fit m-auto"
                   >
                     {taskStatus ? taskStatus : "Confirm"}

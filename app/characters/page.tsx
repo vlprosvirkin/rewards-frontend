@@ -155,7 +155,7 @@ export default function Characters() {
         console.log(res);
         toast.dismiss();
         toast.success("Character upgraded successfully!");
-        setCharLvl(charLvl + 1);
+        setCharLvl(selectedLevel);
       })
       .catch((err) => {
         console.log(err);

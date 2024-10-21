@@ -200,11 +200,11 @@ export default function ConnectWalletButton() {
     const onInitialized = () => {
       console.log(`App::useEffect on _initialized`);
       setConnected(true);
-      if (window.ethereum?.getSelectedAddress()) {
+      if (typeof window.ethereum?.getSelectedAddress === 'function') {
         setAccount(window.ethereum?.getSelectedAddress() ?? "");
       }
 
-      if (window.ethereum?.getChainId()) {
+      if (typeof window.ethereum?.getChainId === 'function') {
         setChain(window.ethereum.getChainId());
       }
     };

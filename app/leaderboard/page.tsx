@@ -67,11 +67,13 @@ export default function Leaderboard() {
   useEffect(() => {
     const doAsync = async () => {
       const res = await getLeaderboard();
+      console.log(res)
       setData(res?.filter((item: Item) => item.address !== account));
     };
 
     doAsync();
   }, [account]);
+
 
   if (!windowSize?.width) return <PulseLogoLoader />;
 

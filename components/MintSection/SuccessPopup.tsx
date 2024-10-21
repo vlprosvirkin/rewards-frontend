@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { checkTask } from "../missions/checkTask";
 import { useUser } from "@/context/UserContext";
+import { MINT_TASK_MOCK } from "@/constants/mintTask";
 
 export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
   const [isMinting, setIsMinting] = useState(false);
@@ -40,6 +41,7 @@ export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
   const checkMintTask = async (address: string, txHash?: string) => {
     try {
       await checkTask(1, address, 'nft_mint')
+      toast.dismiss()
     } catch (e) {
       toast.dismiss()
       toast.error("Error minting NFT. Please try again.");
@@ -53,7 +55,9 @@ export const SuccessPopup = ({ isOpen, onOpen, onClose }: any) => {
       toast.success(`Minting successful! Transaction hash: ${txHash}`);
     }
     if (user) {
-      setUser({ ...user, totalPoints: user?.totalPoints + 100 })
+      const userData = user;
+      userData.completedQuests.push(MINT_TASK_MOCK as any);
+      setUser({ ...user, totalPoints: user?.totalPoints + 100, completedQuests: userData.completedQuests })
     }
     setSuccess(true);
   }
@@ -247,9 +251,12 @@ const Congratulations: React.FC<GratzProps> = ({
                 <div className="text-[13px] text-white/[.58] mb-6">
                   Your unique access NFT is minted
                 </div>
-                <button className="text-[14px] font-bold bg-[#BCFE1E] py-[14px] px-[42px] rounded-lg border border-white/[.29]" onClick={openPolygoscan}>
-                  Transaction
-                </button>
+                {hash && (
+                  <button className="text-[14px] font-bold bg-[#BCFE1E] py-[14px] px-[42px] rounded-lg border border-white/[.29]" onClick={openPolygoscan}>
+                    Transaction
+                  </button>
+                )}
+
               </>
             ) : (
               <>
