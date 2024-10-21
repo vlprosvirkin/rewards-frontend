@@ -1,7 +1,6 @@
 "use client";
 
 import UserAvatar from "@/components/SessionTest";
-import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 declare const auth: (options: Options, callback: Callback) => void;
@@ -36,7 +35,6 @@ declare global {
 
 export default function Test() {
 	const [id, setId] = useState("");
-	const { data: session, status } = useSession();
 
 	useEffect(() => {
 		window.Telegram.Login.init(
@@ -75,7 +73,7 @@ export default function Test() {
 			}
 		);
 	}, []);
-    */
+		*/
 
 	const check = async () => {
 		const req = await fetch(
@@ -106,22 +104,22 @@ export default function Test() {
 							}
 						)
 					}
-					/*
-					onClick={() =>
-						window.Telegram.Login.auth(
-							{
-								bot_id: "547043436",
-							},
-							(data: any) => {
-								if (!data) {
-									console.log("no data");
-								}
-
-								console.log("log data ", data);
+				/*
+				onClick={() =>
+					window.Telegram.Login.auth(
+						{
+							bot_id: "547043436",
+						},
+						(data: any) => {
+							if (!data) {
+								console.log("no data");
 							}
-						)
-					}
-                    */
+
+							console.log("log data ", data);
+						}
+					)
+				}
+									*/
 				>
 					Login via Telegram
 				</button>
@@ -131,13 +129,13 @@ export default function Test() {
 				>
 					Log sessions (server side)
 				</button>
-
+				{/* 
 				<div className="flex flex-col gap-4 bg-white text-black px-3 py-1">
 					{session?.user?.name}
-				</div>
+				</div> */}
 
 				<div className="flex flex-col gap-4 bg-white text-black px-3 py-1">
-					
+
 				</div>
 			</div>
 		</main>
