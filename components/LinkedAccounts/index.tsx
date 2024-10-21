@@ -41,6 +41,7 @@ export function LinkedAccounts({ setActiveTab }: any) {
   const connectTgAccountToUser = async (id: number) => {
     try {
       await linkTgAccount({ address: account, tgId: id });
+      setTgAccount(true);
       toast.dismiss()
       toast.success("Telegram account linked successfully");
     } catch (e) {
@@ -51,11 +52,11 @@ export function LinkedAccounts({ setActiveTab }: any) {
   };
 
   const connectTgAccount = async () => {
+    if (!account) return toast.error("Please connect your wallet first.");
     try {
       window.Telegram.Login.auth({ bot_id: 6819890766 }, (data: any) => {
         console.log('tgData', data)
         if (data?.user?.id || data?.id) {
-          setTgAccount(true);
           console.log('tgData after', data)
           toast.loading("Linking telegram account...");
 

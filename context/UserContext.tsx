@@ -1,6 +1,7 @@
 'use client'
 
 import { getCode } from '@/components/InviteSection/getCode';
+import { clearCookies } from '@/helpers/clearTgCookies';
 import { IUser } from '@/types/user';
 import { registerUser } from '@/utils/actions';
 import { useSDK } from '@metamask/sdk-react';
@@ -76,6 +77,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return
     }
     if (account && ((account && !user) || (account !== user?.address))) {
+      clearCookies('oauth.telegram.org');
       fetchUser(account);
     } else {
       setUser(null);
