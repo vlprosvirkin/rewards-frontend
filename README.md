@@ -26,7 +26,9 @@ Go to OAuth2 section, here you can find client_id and client_secret. Secret will
     AUTH_DISCORD_ID - client id
     AUTH_DISCORD_SECRET - client secret
 
-    
+
+
+
 
     
 
