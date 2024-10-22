@@ -36,6 +36,7 @@ import { DisconnectButton } from "./DisconnectButton";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { Spinner } from "./MintSection/Loader";
 import { useUser } from "@/context/UserContext";
+import { toast } from "react-toastify";
 
 interface input {
   "data-focus": string;
@@ -343,8 +344,11 @@ export default function ConnectWalletButton() {
       } else {
         console.error("No accounts found or user rejected the request.");
       }
-    } catch (e) {
+    } catch (e: any) {
       console.log("Request accounts ERR", e);
+      if (e.code === -32002) {
+        toast.error(e.message)
+      }
     }
   };
 
