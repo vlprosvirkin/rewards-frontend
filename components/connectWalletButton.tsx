@@ -347,8 +347,10 @@ export default function ConnectWalletButton() {
     } catch (e: any) {
       console.log("Request accounts ERR", e);
       if (e.code === -32002) {
-        toast.error(e.message)
+        toast.error("You've already requested an authorization, please return to your wallet and confirm authorization")
+        return
       }
+      toast.error(e.message)
     }
   };
 
