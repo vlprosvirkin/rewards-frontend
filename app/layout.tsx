@@ -4,6 +4,7 @@ import { Anonymous_Pro } from "next/font/google";
 import localFont from "next/font/local";
 import Header from "@/components/header";
 import { Providers } from "@/app/providers";
+import { GoogleAnalytics } from '@next/third-parties/google'
 import "./app.css";
 // import SessionWrapper from "./SessionWrapper";
 import { Root } from "@/components/Root";
@@ -33,6 +34,7 @@ export default function RootLayout({
   return (
     // <SessionWrapper>
     <html lang="en">
+      <GoogleAnalytics gaId="G-DDFCK83RGN" />
       <script
         async
         src="https://telegram.org/js/telegram-widget.js?22"
@@ -42,6 +44,7 @@ export default function RootLayout({
         data-auth-url="https://rewards.aspis.finance/"
         data-request-access="write"
       ></script>
+
       <body
         className={`${gotham.className} ${anon.variable} flex flex-col min-h-screen w-screen`}
       >
