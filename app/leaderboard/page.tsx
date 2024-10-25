@@ -68,7 +68,7 @@ export default function Leaderboard() {
     const doAsync = async () => {
       const res = await getLeaderboard();
       console.log(res)
-      setData(res?.filter((item: Item) => item.address !== account));
+      setData(res?.filter((item: Item) => item.address !== account?.toLowerCase()));
     };
 
     doAsync();
