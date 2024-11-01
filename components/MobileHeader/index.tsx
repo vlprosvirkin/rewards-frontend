@@ -82,7 +82,7 @@ export const MobileHeader = () => {
       case "missions":
         return "Missions Hub";
       case "leaderboard":
-        return "Leaderboard";
+        return "Top 100";
       case "characters":
         return "Characters";
       case "profile":

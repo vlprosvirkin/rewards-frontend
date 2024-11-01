@@ -40,7 +40,7 @@ export const DesktopHeader: React.FC = () => {
           className={`${currentPath == "/leaderboard" ? "text-white" : "text-[#ADADAD]"
             } text-sm flex items-center`}
         >
-          Leaderboard
+          Top 100
         </Link>
         <Link
           href="/characters"

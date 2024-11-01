@@ -593,16 +593,17 @@ export default function ConnectWalletButton() {
         )}
       </div>
 
-      <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
+      <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered autoFocus={false} trapFocus={false}>
         <ModalOverlay />
         <ModalContent
           style={{
             maxWidth: isMobile ? "90%" : "700px",
             backgroundColor: "rgb(19 16 36 / 84%)",
           }}
+          autoFocus={false}
         >
           <>
-            <ModalBody>
+            <ModalBody autoFocus={false}>
               <div className="w-full flex items-center">
                 <p className="mt-4 text-white text-[24px]">
                   {"Connect your wallet"}
@@ -633,6 +634,7 @@ export default function ConnectWalletButton() {
                   placeholder="A0-B1-C2"
                   className="bg-[#322356] pb-2 pt-8 px-2 w-full rounded-[10px] focus:outline-none text-white/[.58]"
                   onChange={(e) => setReferral(e.target.value)}
+                  autoFocus={false}
                 />
                 <span className="absolute top-2 left-2 text-[11px] text-white/[.58]">
                   Code
