@@ -151,7 +151,7 @@ export default function Leaderboard() {
                     item.address.slice(isMobile ? -3 : -4)}
                 </p>
                 <p className="w-1/5 text-center">{item.bonusRate + "x"}</p>
-                <p className="w-1/5 text-center">{item.level || 0}</p>
+                <p className="w-1/5 text-center">{item.charLvl || 0}</p>
                 <p className="w-1/5 text-end pr-2">{item.totalPoints}</p>
               </div>
             ))}
