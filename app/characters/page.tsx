@@ -43,7 +43,7 @@ export const charactersData = [
   {
     name: "Polemarchos",
     levels: [6, 7, 8],
-    images: [polemarchos_lvl3, polemarchos_lvl3],
+    images: [polemarchos_lvl3, polemarchos_lvl3, polemarchos_lvl3],
     description: "Polemarchos were the warlords or military commanders.",
     gridImage: polemarchos_lvl3,
     cost: 2000,

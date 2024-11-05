@@ -68,7 +68,7 @@ export default function Leaderboard() {
     const doAsync = async () => {
       const res = await getLeaderboard();
       console.log(res)
-      setData(res?.filter((item: Item) => item.address !== account));
+      setData(res?.filter((item: Item) => item.address !== account?.toLowerCase()));
     };
 
     doAsync();
@@ -89,11 +89,11 @@ export default function Leaderboard() {
         className={`relative flex flex-col mx-${isMobile ? 5 : 48
           } bg-[#171225] p-6 rounded-2xl ${isMobile ? "mb-[150px]" : ""}`}
       >
-        {data?.length > 10 && (
+        {/* {data?.length > 10 && (
           <button className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 font-bold text-sm text-center py-[14px] px-[42px] bg-[#191728] rounded-lg text-white">
             Load more
           </button>
-        )}
+        )} */}
         <div className="flex justify-between text-[10px] text-white/[.58] mb-5">
           <p className="w-1/5 text-left">Place</p>
           <p className="w-1/5 text-center">User</p>

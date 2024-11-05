@@ -73,10 +73,10 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
-    if (account && user && user.address === account) {
+    if (account && user && user.address === account.toLowerCase()) {
       return
     }
-    if (account && ((account && !user) || (account !== user?.address))) {
+    if (account && ((account && !user) || (account.toLowerCase() !== user?.address))) {
       clearCookies('oauth.telegram.org');
       fetchUser(account);
     } else {
